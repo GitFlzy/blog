@@ -6,7 +6,7 @@ supervisor_path="/etc/supervisor/conf.d/"
 
 supervisor_conf="supervisor.blog.conf"
 nginx_conf="blog.nginx"
-gunicorn_conf="gunicorn.blog.conf"
+gunicorn_conf="gunicorn.blog.py"
 
 
 # 确认 gunicorn 的配置文件

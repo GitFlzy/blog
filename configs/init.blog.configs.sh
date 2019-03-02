@@ -17,6 +17,8 @@ else
     echo "gunicorn 配置文件存在"
 fi
 
+cd ~
+
 echo "建立 supervisor 的启动配置"
 sup_source=${configs_path}${supervisor_conf}
 sup_destination=${supervisor_path}${supervisor_conf}

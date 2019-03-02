@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width">
+</head>
+
+<body>
+    <main class="contents">
+        <form class="post-add" action={{ url_for(".add") }} method="post">
+            <input class="post-content" name="content" placeholder="content">
+            <input class="post-author" name="author" placeholder="author">
+            <input class="post-title" name="title" placeholder="title">
+            <button>添加新博客</button>
+        </form>
+
+    </main>
+    <script type="text/javascript" src="/static/init.js"></script>
+    <script type="text/javascript" src="/static/insert_articles.js"></script>
+</body>
+</html>

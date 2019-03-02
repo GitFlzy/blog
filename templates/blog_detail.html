@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>blog</title>
+    <style>
+    </style>
+</head>
+<body>
+    <content id="post-{{ blog.id }}" class="post article">
+        <header class="entry-header">
+            <!-- <span class="screen-reader-text">{{ blog.title }}</span> -->
+    
+                <h1 class="entry-title">{{ blog.title }}</h1>
+
+                <div class="entry-meta">
+                    <h5>创建时间:{{ blog.year_month_day() }}</h5>
+                    <h5>作者:{{ blog.author }}</h5>
+                </div>
+        </header>
+        <div class="entry-content">
+            <p>内容:{{ blog.content }}</p>
+        </div>
+        <div id="comments" class="comments-area">
+            <ol class="comments-list">
+                {% for c in blog.comments() %}
+                {% if c.root_id == c.id %}
+
+                {% with cs = c.find_all(root_id=c.id) %}
+                <ol class="comment-children">
+                    {% for tc in cs %}
+                    <br>
+                    <ul id="comment-{{ tc.id }}" class="comment-meta">
+                            <li>评论者: {{ tc.author }}</li>
+                            <li>评论时间: {{ tc.year_month_day() }}</li>
+                            <li>评论内容: {{ tc.content }}</li>
+                            <div class="reply">
+                                <button class="comment-reply">回复</button>
+                            </div>
+                    </ul>
+                    {% endfor %}
+                </ol>
+                {% endwith %}
+
+                {% endif %}
+                {% endfor %}
+               
+            </ol>
+            <div id="respond" class="comment-respond">
+                <textarea id="comment" name="comment" method="post"></textarea>
+                <button class="comment-respond-button">发表评论</button>
+                <input type="hidden" name="reply_id" 
+                    value="-1" id="reply_id">
+                <input type="hidden" name="comment_post_ID" 
+                    value="{{ blog.id }}" id="comment_post_ID">
+            </div>
+        </div>
+    </content>
+    <script type="text/javascript" src="/static/init.js"></script>
+    <script type="text/javascript" src="/static/blog.js"></script>
+</body>
+</html>

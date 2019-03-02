@@ -18,7 +18,6 @@ else
 fi
 
 cd ~
-
 echo "建立 supervisor 的启动配置"
 sup_source=${configs_path}${supervisor_conf}
 sup_destination=${supervisor_path}${supervisor_conf}
@@ -32,7 +31,7 @@ else
     echo "supervisor 软链接文件成功建立"
 fi
 
-
+cd ~
 echo "建立 nginx 软链接"
 ngx_source=${configs_path}${nginx_conf}
 ngx_destination=${nginx_path}${nginx_conf}

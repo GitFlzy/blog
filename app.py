@@ -7,8 +7,8 @@ app = Flask(__name__)
 app.secret_key = 'test for good '
 
 app.register_blueprint(index_routes)
-app.register_blueprint(blog_routes, url_prefix='/blog')
-app.register_blueprint(api_blog_routes, url_prefix='/api/blog')
+app.register_blueprint(blog_routes, url_prefix='/blog/')
+app.register_blueprint(api_blog_routes, url_prefix='/api/blog/')
 
 
 if __name__ == '__main__':

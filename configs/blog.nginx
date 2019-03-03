@@ -1,6 +1,9 @@
 server {
     listen 80;
     location / {
-        proxy_pass http://localhost:4196/blog;
+        proxy_pass http://localhost:4196;
+        proxy_set_header X-real-ip $remote_addr;
+        proxy_set_header Host $http_host;
     }
+
 }

@@ -36,6 +36,6 @@ var apiBlogCommentAdd = function(form, callback) {
 }
 
 var apiBlogAll = function(callback) {
-    var path = '/api/blog'
+    var path = '/api/blog/'
     ajax('GET', path, '', callback)
 }

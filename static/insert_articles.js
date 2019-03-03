@@ -11,7 +11,7 @@ var articleTemplate = function(blog) {
         <article id="post-${id}">
             文章id: ${id}
             作者: ${author}
-            标题:<a href="/blog/articles/${id}" rel="bookmark">
+            标题:<a href="/articles/${id}" rel="bookmark">
                 ${title}
                 </a>
             内容: ${content}

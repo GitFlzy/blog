@@ -32,13 +32,14 @@ def detail(blog_id):
 def add():
     # 创建微博
     if request.method == 'GET':
-        return redirect(url_for('blog.index'))
+        log('get add route')
+        return redirect(url_for('.index'))
 
     print('click add button')
     form = request.form
     print('blog add post form', form)
     blog = Blog.new(form)
-    return redirect(url_for('blog.index'))
+    return redirect(url_for('.index'))
 
 
 @main.route('/delete?blog_id=<int:blog_id>', methods=['GET'])

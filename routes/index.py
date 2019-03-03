@@ -18,4 +18,4 @@ main = Blueprint('index', __name__)
 def index():
     # u = current_user()
     # return redirect(url_for('blog.index'))
-    return render_template('blog_index.html')
+    return 'ok'

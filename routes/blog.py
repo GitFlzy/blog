@@ -14,7 +14,7 @@ from utils import log
 main = Blueprint('blog', __name__)
 
 
-@main.route('/', methods=['GET'])
+@main.route('/')
 def index():
     return render_template('blog_index.html')
 

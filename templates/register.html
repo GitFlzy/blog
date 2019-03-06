@@ -5,13 +5,16 @@
     <title>注册页面</title>
 </head>
 <body>
-    <h1>注册</h1>
-    <form action="/register" method="post">
-        <input type="text" name="username" placeholder="请输入用户名">
+    <div id="message">{{ error }}</div>
+    <form class="account-form-field" action="{{ url_for('.register') }}" method="post">
+        <input id="username" class="account-form-input username" type="text"
+        name="username" placeholder="用户名">
         <br>
-        <input type="text" name="password" placeholder="请输入密码">
+        <input id="password" class="account-form-input password" type="text"
+        name="password" placeholder="密码">
         <br>
-        <button type="submit">注册</button>
+        <button type="submit" class="register-button">注册</button>
     </form>
+    <!-- <script src="/static/main.js"></script> -->
 </body>
 </html>

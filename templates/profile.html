@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>用户界面</title>
+</head>
+<body>
+    <div>
+        <p>欢迎, {{ u.username }}</p>
+        {% for s in session.items() %}
+        <p>{{ s }}</p>
+        {% endfor %}
+        <a href="{{ url_for('blog.index') }}">我的博客</a>
+    </div>
+    <br>
+    <div>
+        <form action="{{ url_for('.logout') }}" method="GET">
+            <button>退出登录</button>
+        </form>
+    </div>
+</body>
+</html>

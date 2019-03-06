@@ -162,7 +162,6 @@ class Model(object):
         """
         # log('debug save')
         models = self.all()
-        log('in save, old models', models)
         # log('models', models)
         # 如果没有 id，说明是新添加的元素
         if self.id is None or self.id == -1:

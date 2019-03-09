@@ -4,18 +4,16 @@
     <meta charset="UTF-8">
 </head>
 <body>
-
+    <a href="{{ url_for('blog.new') }}">写新博客</a>
     <main class="contents">
-        <form class="post-add" action={{ url_for(".add") }} method="post">
-            <input class="post-content" name="content" placeholder="content">
-            <input class="post-author" name="author" placeholder="author">
-            <input class="post-title" name="title" placeholder="title">
-            <button>添加新博客</button>
-        </form>
-
+        {% for b in blogs %}
+        <article class="article-content">
+            作者:{{ b.author }}
+            标题:<a href="{{ url_for('.detail', blog_id=b.id) }}">{{ b.title }}</a>
+            创作时间:{{ b.ct }}
+            内容:{{ b.content }}
+        </article>
+        {% endfor %}
     </main>
-    <script type="text/javascript" src="/static/init.js"></script>
-    <script type="text/javascript" src="/static/insert_articles.js"></script>
 </body>
-
 </html>

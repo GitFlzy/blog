@@ -1,6 +1,5 @@
 import time
 from models import Model
-from models.user import User
 from models import save
 
 from utils import log
@@ -48,6 +47,7 @@ class Blog(Model):
 
     def __init__(self, form):
         self.id = None
+        self.user_id = int(form.get('user_id', -1))
         self.author = form.get('author', '')
         self.title = form.get('title', '')
         self.content = form.get('content', '')
@@ -80,17 +80,9 @@ class Comment(Model):
         self.user_id = form.get('user_id', user_id)
         self.blog_id = int(form.get('blog_id', -1))
         self.reply_id = int(form.get('reply_id', -1))
-
-        # init_id = self.id
-        # if init_id is None:
-        #     init_id = -1
-
         self.root_id = int(form.get('root_id', -1))
         self.ct = int(time.time())
-
-    def user(self):
-        u = User.find_by(id=self.user_id)
-        return u
+        self.ut = self.ct
 
     @classmethod
     def delete_by(cls, **kwargs):

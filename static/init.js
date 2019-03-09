@@ -21,7 +21,6 @@ var ajax = function(method, path, data, responseCallback) {
     }
     // 把数据转换为 json 格式字符串
     data = JSON.stringify(data)
-    log('前端 ajax 数据', data)
     // 发送请求
     r.send(data)
 }
@@ -30,12 +29,25 @@ var e = function(sel) {
     return document.querySelector(sel)
 }
 
+var ajaxGet = function(path, callback) {
+    ajax('GET', path, '', callback)
+}
+
+var ajaxPost = function(path, data, callback) {
+    ajax('POST', path, data, callback)
+}
+
 var apiBlogCommentAdd = function(form, callback) {
     var path = '/api/blog/comment/add'
-    ajax('POST', path, form, callback)
+    ajaxPost(path, form, callback)
 }
 
 var apiBlogAll = function(callback) {
     var path = '/api/blog/'
-    ajax('GET', path, '', callback)
+    ajaxGet(path, callback)
+}
+
+var apiBlogDetail = function(blogId, callback) {
+    var path = '/api/blog/comment/all/' + blogId
+    ajaxGet(path, callback)
 }

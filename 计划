@@ -1,0 +1,31 @@
+页面 
+    a. 注册页面
+    b. 登录页面
+    c. profile 页面
+        用户名, 用户下的文章
+
+数据
+    用户属性
+        id
+        username
+        password (session 存储)
+        role (权限等级, 1 最高 为管理员, 默认 5 一般用户)
+        邮箱
+
+    用户方法
+        获取当前用户的类方法
+        类方法 User.cur_user() -> current user 默认是 ''
+        注册, 登录 (len : username > 2, password > 4; 且数据库没有这个账户)
+
+控制
+    点击注册, 跳转到注册页面; 注册页面有两个框, username 和 password 完成
+    如果注册成功, 跳转到登陆页面, 如果失败, 重定向到注册; 完成
+    登陆页面, 点击登录, 如果登录成功, 跳转到 user profile 页面 完成
+    如果失败, 重定向到登陆页面 完成
+
+    登录, profie, articles/blog_id, blog/blog_id 都需要验证登录; 
+    验证登录的方式有 cookie, 如果 cookie 存在于 session 表单中, 完成
+    登录成功, 否则失败;
+    每当在登录页面登录成功, 服务器发送一个 cookie 完成
+
+

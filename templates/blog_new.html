@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+</head>
+<body>
+    <form class="post-add" action={{ url_for(".add") }} method="post">
+            <input class="post-content" name="content" placeholder="content">
+            <input class="post-author" name="author" placeholder="author">
+            <input class="post-title" name="title" placeholder="title">
+            <button>添加新博客</button>
+    </form>
+</body>

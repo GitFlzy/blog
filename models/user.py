@@ -1,5 +1,6 @@
 from models import Model
 from flask import session
+from models.blog import Blog
 
 from config import salt_key
 
@@ -15,6 +16,11 @@ class User(Model):
         self.password = form.get('password', '')
         self.role = int(form.get('role', 5))
         self.email = form.get('email', 'example@email.com')
+        self.icon_link = form.get('icon_link', '')
+
+    def Blogs(self):
+        blogs = Blog.find_all(user_id=self.id)
+        return blogs
 
     @classmethod
     def salted_password(cls, password, salt=salt_key):
@@ -36,17 +42,17 @@ class User(Model):
     @classmethod
     def validate_rule(cls, form):
         # len : username > 2, password > 4 
-        un = form.get('username', '')
+        uname = form.get('username', '')
         pwd = form.get('password', '')
-        if len(un) > 2 and len(pwd) > 4:
+        if len(uname) > 2 and len(pwd) > 4:
             return True
         else:
             return False
 
     @classmethod
-    def exist(cls, form):
-        un = form.get('username', '')
-        if User.find_by(username=un) is None:
+    def existent(cls, form):
+        uid = form.get('id', '')
+        if User.find_by(id=uid) is None:
             return False
         else:
             return True
@@ -56,7 +62,7 @@ class User(Model):
         form = dict(form)
         # uname = form.get('username', '')
         form.pop('role', None)
-        if cls.validate_rule(form) and not cls.exist(form):
+        if cls.validate_rule(form) and not cls.existent(form):
             pwd = form.get('password', '')
             pwd = cls.salted_password(pwd)
             form['password'] = pwd
@@ -67,12 +73,12 @@ class User(Model):
 
     @classmethod
     def validate_login(cls, form):
-        form = dict(form)
+        # form = dict(form)
         uname = form.get('username', '')
         pwd = form.get('password', '')
         u = User.find_by(username=uname)
         if u.password == User.salted_password(pwd):
-            session['username'] = u.username
+            session['user_id'] = u.id
             return True
         else:
             return False
@@ -80,7 +86,8 @@ class User(Model):
     @classmethod
     def current_user(cls):
         uid = int(session.get('user_id', -1))
-        return cls.find_by(id=uid)
+        u = cls.find_by(id=uid)
+        return u
 
     @classmethod
     def register(cls, form):

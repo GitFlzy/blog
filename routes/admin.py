@@ -14,12 +14,13 @@ from models.user import User
 
 from utils import log
 
-main = Blueprint('index', __name__)
+main = Blueprint('admin', __name__)
 
 
 @main.route('/')
 def index():
     return render_template('index.html')
+
 
 @main.route('/register', methods=['GET', 'POST'])
 def register():
@@ -30,11 +31,13 @@ def register():
         u = User.validate_register(form)
         if u is not None:
             session['user_id'] = u.id
-            flash('You were logged in')
+            # log('after register, session({})'.format(session))
+            # flash('You were logged in')
             return redirect(url_for('.login'))
         else:
             error = '注册失败'
     return render_template('register.html', error=error)
+
 
 @main.route('/login', methods=['GET', 'POST'])
 def login():
@@ -54,9 +57,11 @@ def profile():
     log('request method', request.method)
     log('profile start')
     log('总的 session', session)
-    session.get('username')
+    log('session username', session.get('username'))
+    log('session user_id', session.get('user_id'))
+
     
-    if 'username' in session:
+    if 'user_id' in session:
         log('logged in, username is in session')
         user = User.current_user()
         return render_template('profile.html', u = user, session=session)

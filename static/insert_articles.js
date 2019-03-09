@@ -9,7 +9,6 @@ var articleTemplate = function(blog) {
 
     var template = `
         <article id="post-${id}">
-            文章id: ${id}
             作者: ${author}
             标题:<a href="/articles/${id}" rel="bookmark">
                 ${title}

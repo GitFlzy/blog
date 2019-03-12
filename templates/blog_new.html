@@ -2,12 +2,13 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 </head>
 <body>
     <form class="post-add" action={{ url_for(".add") }} method="post">
             <input class="post-content" name="content" placeholder="content">
             <input class="post-author" name="author" placeholder="author">
             <input class="post-title" name="title" placeholder="title">
-            <button>添加新博客</button>
+            <button class="btn btn-default add-article">添加新博客</button>
     </form>
 </body>

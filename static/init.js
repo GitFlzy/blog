@@ -37,6 +37,14 @@ var ajaxPost = function(path, data, callback) {
     ajax('POST', path, data, callback)
 }
 
+var ajaxDelete = function(path, callback) {
+    ajax('DELETE', path, '', callback)
+}
+
+var ajaxPut = function(path, callback) {
+    ajax('PUT', path, '', callback)
+}
+
 var apiBlogCommentAdd = function(form, callback) {
     var path = '/api/blog/comment/add'
     ajaxPost(path, form, callback)
@@ -47,7 +55,17 @@ var apiBlogAll = function(callback) {
     ajaxGet(path, callback)
 }
 
-var apiBlogDetail = function(blogId, callback) {
+var apiCommentsAll = function(blogId, callback) {
     var path = '/api/blog/comment/all/' + blogId
     ajaxGet(path, callback)
+}
+
+var apiBlogDelete = function(blogId, callback) {
+    var path = '/api/blog/delete/' + blogId
+    ajaxDelete(path, callback)
+}
+
+var apiCommentAgree = function(commentId, callback) {
+    var path = '/api/blog/comment/agree/' + commentId
+    ajaxPut(path, callback)
 }

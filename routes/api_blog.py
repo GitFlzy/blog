@@ -5,6 +5,7 @@ from utils import log
 
 from models.blog import Comment
 from models.blog import Blog
+from models.user import User
 
 from flask import (
     request,
@@ -18,6 +19,17 @@ main = Blueprint('api_blog', __name__)
 
 @main.route('/', methods=['GET'])
 def index():
+    cur_user = User.current_user()
+    if cur_user is None:
+        return redirect(url_for('admin.login'))
+
+    log('blog index, 当前用户', cur_user)
+    cur_uid = cur_user.id
+    blog = Blog.find_by(id=blog_id)
+    owner_uid = blog.user_id
+    if cur_user.id != owner_uid:
+        return redirect(url_for('blog.index'))
+
     articles = Blog.all()
     log('articles', articles)
     json_ars = [art.json() for art in articles]
@@ -36,8 +48,15 @@ def add_comment():
     log('debug *** form ***', form)
 
     o = Comment.new(form)
+    b.update_replies()
     log('debug ** new comment', o)
-    return jsonify(o.json())
+    rf = {
+        'comment': o.json(),
+        'replies': b.replies,
+    }
+    log('rf', rf)
+    log('jsonify rf', jsonify(rf), type(jsonify(rf)))
+    return jsonify(rf)
 
 
 @main.route('/comment/all/<int:blog_id>')
@@ -45,6 +64,47 @@ def all_comments(blog_id):
     log('debug all comments')
     b = Blog.find_by(id=blog_id)
     comments = b.comments()
-    cs = [c.json() for c in comments ]
+    cs = [c.json() for c in comments]
     log('debug comments', cs)
     return jsonify(cs)
+
+
+@main.route('/delete/<int:blog_id>', methods=['DELETE'])
+def delete_blog(blog_id):
+    log('debug 删除博客')
+
+    cur_user = User.current_user()
+    if cur_user is None:
+        log('当前用户是', cur_user)
+        return redirect(url_for('admin.login'))
+
+    log('debug 当前用户', cur_user)
+    cur_uid = cur_user.id
+    blog = Blog.find_by(id=blog_id)
+    owner_uid = blog.user_id
+    if cur_user.id != owner_uid:
+        log("""用户(uid={})想要访问用户(uid={})的博客,
+            跳转到用户(uid={})的博客主页""".format(cur_uid, owner_uid, cur_uid))
+        return redirect(url_for('.index'))
+
+    log('debug before 删除博客')
+    blog.delete()
+    return jsonify({'status': True})
+
+
+@main.route('/comment/agree/<int:comment_id>', methods=['PUT'])
+def agree_comment(comment_id):
+    log('debug 点赞评论')
+
+    cur_user = User.current_user()
+    if cur_user is None:
+        log('当前用户是', cur_user)
+        return redirect(url_for('admin.login'))
+
+    comment = Comment.find_by(id=comment_id)
+    comment.agree()
+    form = {
+        'status': True,
+        'agreed': comment.agreed,
+    }
+    return jsonify(form)

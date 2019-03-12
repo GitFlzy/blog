@@ -5,13 +5,13 @@ from routes.api_blog import main as api_blog_routes
 # from routes.user import main as user_routes
 from config import secret_key
 
+
 app = Flask(__name__)
 app.secret_key = secret_key
 
 app.register_blueprint(blog_routes, url_prefix='/')
 app.register_blueprint(admin_routes, url_prefix='/admin')
 app.register_blueprint(api_blog_routes, url_prefix='/api/blog')
-# app.register_blueprint(user_routes, url_prefix='/admin')
 
 
 if __name__ == '__main__':

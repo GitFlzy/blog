@@ -34,6 +34,12 @@ class Blog(Model):
         return t
 
     @classmethod
+    def all(cls):
+        all_blogs = super().all()
+        bs = [b for b in all_blogs if b.deleted is False]
+        return bs
+
+    @classmethod
     def complete(cls, id, completed=True):
         """
         用法很方便
@@ -46,6 +52,7 @@ class Blog(Model):
         return t
 
     def __init__(self, form):
+        super().__init__()
         self.id = None
         self.user_id = int(form.get('user_id', -1))
         self.author = form.get('author', '')
@@ -53,13 +60,23 @@ class Blog(Model):
         self.content = form.get('content', '')
         # 下面的是默认的数据
         self.completed = False
-        # ct ut 分别是 created_time  updated_time
-        # 创建时间和 更新时间
         self.ct = int(time.time())
         self.ut = self.ct
+        self.visits = 0
+        self.replies = 0
+        self.deleted = False
+
+    def update_visits(self):
+        self.visits += 1
+        self.save()
+
+    def update_replies(self):
+        self.replies = len(self.comments())
+        self.save()
 
     def comments(self):
-        return Comment.find_all(blog_id=self.id)
+        all_comments = Comment.find_all(blog_id=self.id)
+        return [c for c in all_comments if c.deleted is False]
 
     def json(self):
         log('json blog object start')
@@ -68,6 +85,24 @@ class Blog(Model):
         d['comments'] = comments
         log('json end, self', d)
         return d
+
+    def delete(self):
+        Comment.delete_all(blog_id=self.id)
+        self.deleted = True
+        self.save()
+
+    @classmethod
+    def find_all(cls, **kwargs):
+        blogs = super().find_all(**kwargs)
+        bs = [b for b in blogs if b.deleted is False]
+        return bs
+
+    @classmethod
+    def find_by(cls, **kwargs):
+        blog = super().find_by(**kwargs)
+        if blog is None or blog.deleted is True:
+            return None
+        return blog
 
 
 # 评论类
@@ -83,20 +118,34 @@ class Comment(Model):
         self.root_id = int(form.get('root_id', -1))
         self.ct = int(time.time())
         self.ut = self.ct
+        self.deleted = False
+        self.agreed = 0
+
+    def delete(self):
+        self.deleted = True
+        self.save()
 
     @classmethod
-    def delete_by(cls, **kwargs):
-        k, v = '', ''
-        for key, value in kwargs.items():
-            k, v = key, value
-        all = cls.all()
-        for i, m in enumerate(all):
-            # m = all[i]
-            if v == m.__dict__[k]:
-                obj = all.pop(i)
-                log('delete_by pop obj', obj)
-                l = [m.__dict__ for m in all]
-                path = cls.db_path()
-                save(l, path)
-                return obj
-        return None
+    def delete_all(cls, **kwargs):
+        blogs = cls.all()
+        for k, v in kwargs.items():
+            for b in blogs:
+                if b.__dict__[k] == v and b.deleted is False:
+                    b.delete()
+
+    @classmethod
+    def find_all(cls, **kwargs):
+        comments = super().find_all(**kwargs)
+        cs = [c for c in comments if c.deleted is False]
+        return cs
+
+    @classmethod
+    def find_by(cls, **kwargs):
+        comment = super().find_by(**kwargs)
+        if comment is None or comment.deleted is True:
+            return None
+        return comment
+
+    def agree(self):
+        self.agreed += 1
+        self.save()

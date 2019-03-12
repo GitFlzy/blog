@@ -52,6 +52,7 @@ def login():
             error = 'Invalid username or password'
     return render_template('login.html', error=error)
 
+
 @main.route('/profile', methods=['GET', 'POST'])
 def profile():
     log('request method', request.method)
@@ -60,7 +61,6 @@ def profile():
     log('session username', session.get('username'))
     log('session user_id', session.get('user_id'))
 
-    
     if 'user_id' in session:
         log('logged in, username is in session')
         user = User.current_user()
@@ -68,6 +68,7 @@ def profile():
     else:
         log('username is not in session')
         return redirect(url_for('.index'))
+
 
 @main.route('/logout')
 def logout():

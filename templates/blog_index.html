@@ -1,19 +1,88 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
+    <link rel="stylesheet" href="/css/blog.main.css">
 </head>
+
 <body>
-    <a href="{{ url_for('blog.new') }}">写新博客</a>
+    <article id="post-qinghai-lake-record" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+        <div class="article-inner">
+            <header class="article-header">
+                <h1 itemprop="name">
+                    <a class="article-title" href="/2018/04/25/qinghai-lake-record/">青海湖志事</a>
+                </h1>
+                <a href="/2018/04/25/qinghai-lake-record/" class="archive-article-date">
+                    <time datetime="2018-04-25T15:30:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-04-25</time>
+                </a>
+            </header>
+
+            <div class="article-entry" itemprop="articleBody">
+
+                <p>八月环青海湖，一些零碎的记忆。</p>
+                <h3 id="魔礼海"><a href="#魔礼海" class="headerlink" title="魔礼海"></a>魔礼海</h3>
+                <p>有次潘子喝醉了，突然说，“你知道吗，魔礼海按的是一个Am和弦。”<br>我说：“魔个头，不如魔力红。”<br>潘子说：“我跟你讨论宗教时能不能正经点？”<br>我心想，干，Am和弦很正经吗？人家弹的还是一琵琶…</p>
+
+                <a class="article-more-a" href="/2018/04/25/qinghai-lake-record/#more">more >></a>
+            </div>
+
+            <div class="article-info article-info-index">
+                <div class="article-tag tagcloud">
+                    <i class="icon-price-tags icon"></i>
+                    <ul class="article-tag-list">
+
+                        <li class="article-tag-list-item">
+                            <a href="javascript:void(0)" class="js-tag article-tag-list-link color3">旧事</a>
+                        </li>
+
+                        <li class="article-tag-list-item">
+                            <a href="javascript:void(0)" class="js-tag article-tag-list-link color3">游记</a>
+                        </li>
+
+                    </ul>
+                </div>
+                <p class="article-more-link">
+                    <a class="article-more-a" href="/2018/04/25/qinghai-lake-record/">展开全文 >></a>
+                </p>
+
+
+
+                <div class="clearfix"></div>
+            </div>
+        </div>
+    </article>
+
+    <aside class="wrap-side-operation">
+        <div class="mod-side-operation">
+
+            <div class="jump-container" id="js-jump-container" style="display:none;">
+                <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                    <i class="icon-font icon-back"></i>
+                </a>
+                <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                    <i class="icon-font icon-plane jump-plane"></i>
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <h3><a href="{{ url_for('blog.new') }}">写新博客</a></h3>
     <main class="contents">
         {% for b in blogs %}
         <article class="article-content">
-            作者:{{ b.author }}
-            标题:<a href="{{ url_for('.detail', blog_id=b.id) }}">{{ b.title }}</a>
+            <h5>作者:{{ b.author }}</h5>
+            <a href="{{ url_for('.detail', blog_id=b.id) }}">
+                <h2>{{ b.title }}</h2>
+            </a>
+            <button class="btn btn-default delete-button" data-blog-id="{{ b.id }}">删除</button>
             创作时间:{{ b.ct }}
             内容:{{ b.content }}
         </article>
         {% endfor %}
     </main>
+    <script type="text/javascript" src="/static/init.js"></script>
+    <script type="text/javascript" src="/static/blog_index.js"></script>
 </body>
+
 </html>

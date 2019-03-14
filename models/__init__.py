@@ -37,8 +37,16 @@ class Model(object):
         return time.strftime(format_str, t)
 
     @classmethod
-    def new(cls, model):
+    def new(cls, model, **kwargs):
         w = cls(model)
+        # log('1. 更新关键词', k, '更新内容', v)
+
+        for k, v in kwargs.items():
+            log('2. 更新关键词', k, '更新内容', v)
+
+            if k in ['id', 'author', 'title', 'content', 'user_id']:
+                log('3. 更新关键词', k, '更新内容', v)
+                setattr(w, k, v)
         w.save()
         return w
 

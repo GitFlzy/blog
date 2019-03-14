@@ -3,86 +3,228 @@
 
 <head>
     <meta charset="UTF-8">
-    <link rel="stylesheet" href="/css/blog.main.css">
+    <link rel="stylesheet" href="/static/css/blog.main.css">
 </head>
 
 <body>
-    <article id="post-qinghai-lake-record" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-        <div class="article-inner">
-            <header class="article-header">
-                <h1 itemprop="name">
-                    <a class="article-title" href="/2018/04/25/qinghai-lake-record/">青海湖志事</a>
-                </h1>
-                <a href="/2018/04/25/qinghai-lake-record/" class="archive-article-date">
-                    <time datetime="2018-04-25T15:30:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-04-25</time>
-                </a>
-            </header>
+    <div id="container" q-class="show:isCtnShow" style="height: 578px;">
+        <canvas id="anm-canvas" class="anm-canvas" width="848" height="578"></canvas>
+        <div class="left-col" q-class="show:isShow">
 
-            <div class="article-entry" itemprop="articleBody">
-
-                <p>八月环青海湖，一些零碎的记忆。</p>
-                <h3 id="魔礼海"><a href="#魔礼海" class="headerlink" title="魔礼海"></a>魔礼海</h3>
-                <p>有次潘子喝醉了，突然说，“你知道吗，魔礼海按的是一个Am和弦。”<br>我说：“魔个头，不如魔力红。”<br>潘子说：“我跟你讨论宗教时能不能正经点？”<br>我心想，干，Am和弦很正经吗？人家弹的还是一琵琶…</p>
-
-                <a class="article-more-a" href="/2018/04/25/qinghai-lake-record/#more">more >></a>
-            </div>
-
-            <div class="article-info article-info-index">
-                <div class="article-tag tagcloud">
-                    <i class="icon-price-tags icon"></i>
-                    <ul class="article-tag-list">
-
-                        <li class="article-tag-list-item">
-                            <a href="javascript:void(0)" class="js-tag article-tag-list-link color3">旧事</a>
-                        </li>
-
-                        <li class="article-tag-list-item">
-                            <a href="javascript:void(0)" class="js-tag article-tag-list-link color3">游记</a>
-                        </li>
-
-                    </ul>
-                </div>
-                <p class="article-more-link">
-                    <a class="article-more-a" href="/2018/04/25/qinghai-lake-record/">展开全文 >></a>
-                </p>
-
-
-
-                <div class="clearfix"></div>
-            </div>
         </div>
-    </article>
+        <div class="mid-col" q-class="show:isShow,hide:isShow|isFalse">
 
-    <aside class="wrap-side-operation">
-        <div class="mod-side-operation">
+            <nav id="mobile-nav">
+                <div class="overlay js-overlay" style="background: #4d4d4d"></div>
+                <div class="btnctn js-mobile-btnctn">
+                    <div class="slider-trigger list" q-on="click: openSlider(e)"><i class="icon icon-sort"></i></div>
+                </div>
+                <div class="intrude-less">
+                    <header id="header" class="inner">
+                        <div class="profilepic">
+                            <img src="/assets/blogImg/cute.png" class="js-avatar">
+                        </div>
+                        <hgroup>
+                            <h1 class="header-author js-header-author">username</h1>
+                        </hgroup>
 
-            <div class="jump-container" id="js-jump-container" style="display:none;">
-                <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                    <i class="icon-font icon-back"></i>
-                </a>
-                <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                    <i class="icon-font icon-plane jump-plane"></i>
+
+                        <nav class="header-nav">
+                            <div class="social">
+                                <a class="github" target="_blank" href="https://github.com/" title="github"><i
+                                        class="icon-github"></i></a>
+                            </div>
+                        </nav>
+
+                        <nav class="header-menu js-header-menu">
+                            <ul style="width: 50%">
+
+
+                                <li style="width: 50%"><a href="/">主页</a></li>
+
+                                <li style="width: 50%"><a href="/photos">相册</a></li>
+
+                            </ul>
+                        </nav>
+                    </header>
+                </div>
+                <div class="mobile-mask" style="display:none" q-show="isShow"></div>
+            </nav>
+
+            <div id="wrapper" class="body-wrap">
+                <div class="menu-l">
+                    <div class="canvas-wrap">
+                        <canvas data-colors="#eaeaea" data-sectionheight="100" data-contentid="js-content" id="myCanvas1"
+                            class="anm-canvas"></canvas>
+                    </div>
+                    <div id="js-content" class="content-ll contents">
+                        {% for b in blogs %}
+                        <article id="{{ b.id }}" class="article article-type-post article-index" itemscope itemprop="blogPost">
+                            <div class="article-inner">
+                                <header class="article-header">
+                                    <h1 itemprop="name">
+                                        <a class="article-title" href="{{ url_for('blog.detail', blog_id=b.id)}}">
+                                            {{ b.title }}
+                                        </a>
+                                    </h1>
+                                    <time class="archive-article-date" datetime="{{ b.ct }}" itemprop="datePublished">
+                                        <i class="icon-calendar icon"></i>
+                                        {{ b.ct }}
+                                    </time>
+                                </header>
+
+                                <div class="article-entry" itemprop="articleBody">
+                                    <div>
+                                        {{ b.content | truncate | safe }}
+                                    </div>
+                                    <a class="article-more-a" href="{{ url_for('blog.detail', blog_id=b.id) }}">
+                                        more >>
+                                    </a>
+                                </div>
+
+                                <div class="article-info article-info-index">
+                                    <div class="article-tag tagcloud">
+                                        <i class="icon-price-tags icon"></i>
+                                        <ul class="article-tag-list">
+
+                                            <li class="article-tag-list-item">
+                                                <a href="javascript:void(0)" class="js-tag article-tag-list-link color3">旧事</a>
+                                            </li>
+
+                                            <li class="article-tag-list-item">
+                                                <a href="javascript:void(0)" class="js-tag article-tag-list-link color3">游记</a>
+                                            </li>
+
+                                        </ul>
+                                    </div>
+                                    <p class="article-more-link">
+                                        <a class="article-more-a" href="{{ url_for('blog.detail', blog_id=b.id) }}">
+                                            展开全文 >>
+                                        </a>
+                                    </p>
+
+                                    <div class="clearfix"></div>
+                                </div>
+                            </div>
+                        </article>
+                        <aside class="wrap-side-operation">
+                            <div class="mod-side-operation">
+
+                                <div class="jump-container" id="js-jump-container" style="display:none;">
+                                    <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                                        <i class="icon-font icon-back"></i>
+                                    </a>
+                                    <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                                        <i class="icon-font icon-plane jump-plane"></i>
+                                    </div>
+                                </div>
+
+
+                            </div>
+                        </aside>
+                        {% endfor %}
+
+                        <nav id="page-nav"><a class="extend prev disabled" rel="prev">« Prev</a>
+                            <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a
+                                class="page-number" href="/page/3/">3</a><span class="space">…</span><a class="page-number"
+                                href="/page/10/">10</a><a class="extend next" rel="next" href="/page/2/">Next »</a>
+                        </nav>
+                    </div>
                 </div>
             </div>
+            <footer id="footer">
+                <div class="outer">
+                    <div id="footer-info">
+                        <div class="footer-left">
+                            © {年} { 作者 }
+                        </div>
+                    </div>
+                </div>
+            </footer>
         </div>
-    </aside>
 
-    <h3><a href="{{ url_for('blog.new') }}">写新博客</a></h3>
-    <main class="contents">
-        {% for b in blogs %}
-        <article class="article-content">
-            <h5>作者:{{ b.author }}</h5>
-            <a href="{{ url_for('.detail', blog_id=b.id) }}">
-                <h2>{{ b.title }}</h2>
-            </a>
-            <button class="btn btn-default delete-button" data-blog-id="{{ b.id }}">删除</button>
-            创作时间:{{ b.ct }}
-            内容:{{ b.content }}
-        </article>
-        {% endfor %}
-    </main>
-    <script type="text/javascript" src="/static/init.js"></script>
-    <script type="text/javascript" src="/static/blog_index.js"></script>
+
+        <div class="tools-col" q-class="show:isShow,hide:isShow|isFalse" q-on="click:stop(e)">
+            <div class="tools-nav header-menu">
+
+                <ul style="width: 70%">
+                    <li style="width: 50%" q-on="click: openSlider(e, 'innerArchive')"><a href="javascript:void(0)"
+                            q-class="active:innerArchive">所有文章</a></li>
+                    <li style="width: 50%" q-on="click: openSlider(e, 'aboutme')"><a href="javascript:void(0)" q-class="active:aboutme">关于我</a></li>
+                </ul>
+            </div>
+
+        </div>
+        <!-- Root element of PhotoSwipe. Must have class pswp. -->
+        <div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+            <!-- Background of PhotoSwipe. 
+                     It's a separate element as animating opacity is faster than rgba(). -->
+            <div class="pswp__bg"></div>
+
+            <!-- Slides wrapper with overflow:hidden. -->
+            <div class="pswp__scroll-wrap">
+
+                <!-- Container that holds slides. 
+                        PhotoSwipe keeps only 3 of them in the DOM to save memory.
+                        Don't modify these 3 pswp__item elements, data is added later on. -->
+                <div class="pswp__container">
+                    <div class="pswp__item"></div>
+                    <div class="pswp__item"></div>
+                    <div class="pswp__item"></div>
+                </div>
+
+                <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+                <div class="pswp__ui pswp__ui--hidden">
+
+                    <div class="pswp__top-bar">
+
+                        <!--  Controls are self-explanatory. Order can be changed. -->
+
+                        <div class="pswp__counter"></div>
+
+                        <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                        <button class="pswp__button pswp__button--share" style="display:none" title="Share"></button>
+
+                        <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                        <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                        <div class="pswp__preloader">
+                            <div class="pswp__preloader__icn">
+                                <div class="pswp__preloader__cut">
+                                    <div class="pswp__preloader__donut"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                        <div class="pswp__share-tooltip"></div>
+                    </div>
+
+                    <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+                    </button>
+
+                    <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+                    </button>
+
+                    <div class="pswp__caption">
+                        <div class="pswp__caption__center"></div>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+    <script type="text/javascript" src="/static/js/init.js"></script>
+    <script type="text/javascript" src="/static/js/left_column.js"></script>
+    <script type="text/javascript" src="/static/js/format_time.js"></script>
+    <script type="text/javascript" src="/static/js/blog_index.js"></script>
 </body>
 
 </html>

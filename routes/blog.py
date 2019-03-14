@@ -36,22 +36,16 @@ def new():
 
 @main.route('/articles/<int:blog_id>', methods=['GET'])
 def detail(blog_id):
-    # blog_id = request.args.get('blog_id', -1)
     cur_user = User.current_user()
-    log('当前登录的用户是({})'.format(cur_user))
+    log('当前的用户是({})'.format(cur_user))
     if cur_user is None:
         return redirect(url_for('admin.login'))
 
     cur_uid = cur_user.id
     blog = Blog.find_by(id=blog_id)
-    owner_uid = blog.user_id
-    if cur_user.id != owner_uid:
-        log("""用户(uid={})想要访问用户(uid={})的博客,
-            跳转到用户(uid={})的博客主页""".format(cur_uid, owner_uid, cur_uid))
+    if blog is None or cur_user.id != blog.user_id:
         return redirect(url_for('.index'))
 
-    blog.update_visits()
-    blog.update_replies()
     return render_template('blog_detail.html', blog=blog)
 
 
@@ -67,9 +61,7 @@ def add():
         return redirect(url_for('.index'))
 
     form = dict(request.form)
-    u = User.current_user()
-    user_id = u.id
-    form['user_id'] = user_id
-    print('blog add post form', form)
-    blog = Blog.new(form)
+    log('post 博客', form)
+    # u = User.current_user()
+    blog = Blog.new(form, user_id=u.id)
     return redirect(url_for('.detail', blog_id=blog.id))

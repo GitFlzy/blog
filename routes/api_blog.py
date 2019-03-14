@@ -59,7 +59,7 @@ def add_comment():
     return jsonify(rf)
 
 
-@main.route('/comment/all/<int:blog_id>')
+@main.route('/<int:blog_id>/comment/all')
 def all_comments(blog_id):
     log('debug all comments')
     b = Blog.find_by(id=blog_id)

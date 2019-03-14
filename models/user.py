@@ -77,11 +77,11 @@ class User(Model):
         uname = form.get('username', '')
         pwd = form.get('password', '')
         u = User.find_by(username=uname)
-        if u.password == User.salted_password(pwd):
+        if u is None or u.password != User.salted_password(pwd):
+            return False
+        else:
             session['user_id'] = u.id
             return True
-        else:
-            return False
 
     @classmethod
     def current_user(cls):

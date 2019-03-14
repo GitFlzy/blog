@@ -31,8 +31,6 @@ def register():
         u = User.validate_register(form)
         if u is not None:
             session['user_id'] = u.id
-            # log('after register, session({})'.format(session))
-            # flash('You were logged in')
             return redirect(url_for('.login'))
         else:
             error = '注册失败'
@@ -46,7 +44,6 @@ def login():
     if request.method == 'POST':
         if User.validate_login(form):
             session['logged_in'] = True
-            # flash('You were logged in')
             return redirect(url_for('.profile'))
         else:
             error = 'Invalid username or password'
@@ -55,18 +52,12 @@ def login():
 
 @main.route('/profile', methods=['GET', 'POST'])
 def profile():
-    log('request method', request.method)
-    log('profile start')
-    log('总的 session', session)
-    log('session username', session.get('username'))
-    log('session user_id', session.get('user_id'))
-
     if 'user_id' in session:
         log('logged in, username is in session')
         user = User.current_user()
-        return render_template('profile.html', u = user, session=session)
+        return render_template('profile.html', u=user, session=session)
     else:
-        log('username is not in session')
+        log('username is not in session', session)
         return redirect(url_for('.index'))
 
 

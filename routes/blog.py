@@ -15,12 +15,7 @@ main = Blueprint('blog', __name__)
 
 @main.route('/')
 def index():
-    user = User.current_user()
-    log('current user ({})'.format(user))
-    if user is None:
-        return redirect(url_for('admin.login'))
-
-    blogs = Blog.find_all(user_id=user.id)
+    blogs = Blog.find_all(user_id=1)
     return render_template('blog_index.html', blogs=blogs)
 
 

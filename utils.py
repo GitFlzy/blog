@@ -1,5 +1,6 @@
 import time
 
+
 def log(*args, **kwargs):
     format = '%H:%M:%S'
     value = time.localtime(int(time.time()))

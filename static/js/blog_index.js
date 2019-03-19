@@ -1,6 +1,6 @@
 var __main = function() {
-    loadLeftColumn()
     loadFormatDate()
+    loadProfile()
 }
 
 __main()

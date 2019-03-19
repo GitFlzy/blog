@@ -5,7 +5,10 @@ from utils import log
 
 from models.blog import Comment
 from models.blog import Blog
-from models.user import User
+from models.user import (
+    User,
+    login_required,
+)
 
 from flask import (
     request,
@@ -92,19 +95,8 @@ def delete_blog(blog_id):
     return jsonify({'status': True})
 
 
-@main.route('/comment/agree/<int:comment_id>', methods=['PUT'])
-def agree_comment(comment_id):
-    log('debug 点赞评论')
-
-    cur_user = User.current_user()
-    if cur_user is None:
-        log('当前用户是', cur_user)
-        return redirect(url_for('admin.login'))
-
-    comment = Comment.find_by(id=comment_id)
-    comment.agree()
-    form = {
-        'status': True,
-        'agreed': comment.agreed,
-    }
-    return jsonify(form)
+@main.route('/user/profile', methods=['GET'])
+def user_profile():
+    u = User.profile(1)
+    log('用户简介', u)
+    return jsonify(u)

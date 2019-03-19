@@ -1,8 +1,9 @@
 from flask import Flask
+from config import secret_key
+
 from routes.blog import main as blog_routes
 from routes.admin import main as admin_routes
 from routes.api_blog import main as api_blog_routes
-from config import secret_key
 
 
 app = Flask(__name__)
@@ -17,6 +18,6 @@ if __name__ == '__main__':
     config = dict(
         port=3000,
         host='0.0.0.0',
-        debug=False,
+        debug=True,
     )
     app.run(**config)

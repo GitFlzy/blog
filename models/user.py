@@ -1,22 +1,61 @@
 from models import Model
-from flask import session
+from flask import (
+    session,
+    redirect,
+    url_for,
+)
 from models.blog import Blog
+from models import Mongodb
 
 from config import salt_key
 
+from functools import wraps
 
-class User(Model):
+
+def login_required(route_func):
+    @wraps(route_func)
+    def func(*args, **kwargs):
+        user = User.current_user()
+        if user is None:
+            return redirect(url_for('admin.login', error='用户未登录'))
+        return route_func(*args, **kwargs)
+    return func
+
+
+class User(Mongodb):
     """
     User 是一个保存用户数据的 model
-    现在只有两个属性 username 和 password
+    现在只有两个属性 email 和 password
     """
-    def __init__(self, form):
-        self.id = form.get('id', None)
-        self.username = form.get('username', '')
-        self.password = form.get('password', '')
-        self.role = int(form.get('role', 5))
-        self.email = form.get('email', 'example@email.com')
-        self.icon_link = form.get('icon_link', '')
+    __fields__ = Mongodb.__fields__ + [
+        # (字段名, 类型, 值)
+        ('email', str, ''),
+        ('password', str, ''),
+        ('avatar', str, ''),
+        ('username', str, 'gw123'),
+        ('subtitle', str, '付出 xx 不一定得到 yy'),
+    ]
+
+    def remove_sensitives(self):
+        self.__dict__.pop('password', None)
+        self.__dict__.pop('role', None)
+        self.__dict__.pop('id', None)
+        self.__dict__.pop('deleted', None)
+
+    @classmethod
+    def profile(cls, id):
+        u = cls.find_by(id=id)
+        u.remove_sensitives()
+        return u.json()
+
+    def save_image(self, file, path):
+        file.save(path)
+        self.avatar = file.filename
+        self.save()
+
+    @classmethod
+    def clear_login_status(cls):
+        session.pop('user_id', None)
 
     def Blogs(self):
         blogs = Blog.find_all(user_id=self.id)
@@ -41,8 +80,8 @@ class User(Model):
 
     @classmethod
     def validate_rule(cls, form):
-        # len : username > 2, password > 4 
-        uname = form.get('username', '')
+        # len : email > 2, password > 4 
+        uname = form.get('email', '')
         pwd = form.get('password', '')
         if len(uname) > 2 and len(pwd) > 4:
             return True
@@ -60,13 +99,13 @@ class User(Model):
     @classmethod
     def validate_register(cls, form):
         form = dict(form)
-        # uname = form.get('username', '')
         form.pop('role', None)
         if cls.validate_rule(form) and not cls.existent(form):
             pwd = form.get('password', '')
             pwd = cls.salted_password(pwd)
             form['password'] = pwd
             u = User.new(form)
+            session['user_id'] = u.id
             return u
         else:
             return None
@@ -74,13 +113,14 @@ class User(Model):
     @classmethod
     def validate_login(cls, form):
         # form = dict(form)
-        uname = form.get('username', '')
+        uname = form.get('email', '')
         pwd = form.get('password', '')
-        u = User.find_by(username=uname)
+        u = User.find_by(email=uname)
         if u is None or u.password != User.salted_password(pwd):
             return False
         else:
             session['user_id'] = u.id
+            session['logged_in'] = True
             return True
 
     @classmethod
@@ -95,7 +135,7 @@ class User(Model):
         validate_login 返回
         :参数 form 是一个包含用户名和用户密码的表单, 如下格式:
             form = {
-                'username': 'example_username',
+                'email': 'example_email',
                 'password': 'example_password',
             }
         """

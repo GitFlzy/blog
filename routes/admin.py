@@ -2,17 +2,24 @@ from flask import (
     render_template,
     request,
     redirect,
-    session,
     url_for,
     Blueprint,
     make_response,
     jsonify,
     flash,
 )
+from werkzeug.utils import secure_filename
 
-from models.user import User
+from config import files_path
+
+from models.user import (
+    User,
+    login_required,
+)
 
 from utils import log
+
+import os
 
 main = Blueprint('admin', __name__)
 
@@ -30,7 +37,6 @@ def register():
     if request.method == 'POST':
         u = User.validate_register(form)
         if u is not None:
-            session['user_id'] = u.id
             return redirect(url_for('.login'))
         else:
             error = '注册失败'
@@ -39,29 +45,57 @@ def register():
 
 @main.route('/login', methods=['GET', 'POST'])
 def login():
-    error = ''
+    error = request.args.get('error', '')
     form = request.form
     if request.method == 'POST':
+        log('当前用户', User.current_user())
         if User.validate_login(form):
-            session['logged_in'] = True
             return redirect(url_for('.profile'))
         else:
-            error = 'Invalid username or password'
+            error = '无效的账号或者密码'
     return render_template('login.html', error=error)
 
 
 @main.route('/profile', methods=['GET', 'POST'])
+@login_required
 def profile():
-    if 'user_id' in session:
-        log('logged in, username is in session')
-        user = User.current_user()
-        return render_template('profile.html', u=user, session=session)
-    else:
-        log('username is not in session', session)
-        return redirect(url_for('.index'))
+    log('logged in, username is in session')
+    message = request.args.get('message', '')
+    user = User.current_user()
+    return render_template('profile.html', u=user, message=message)
 
 
-@main.route('/logout')
+@main.route('/logout', methods=['POST', 'GET'])
 def logout():
-    session.pop('user_id', None)
+    User.clear_login_status()
     return redirect(url_for('.index'))
+
+
+def allow_file(filename):
+    suffix = filename.split('.')[-1]
+    from config import accept_user_file_type
+    return suffix in accept_user_file_type
+
+
+@main.route('/settings/avatar', methods=['POST'])
+@login_required
+def upload_avatar():
+    log('request files', request.files)
+    if 'avatar' not in request.files:
+        return redirect(url_for('.profile'))
+
+    file = request.files['avatar']
+    log('load file', file)
+    path = files_path
+    filename = file.filename
+    log('文件的文件名', filename)
+    if allow_file(filename):
+        # filename = secure_filename(filename)
+        import uuid
+        suffix = filename.split('.')[-1]
+        filename = str(uuid.uuid3(uuid.NAMESPACE_DNS, filename)) + '.' + suffix
+        file.filename = filename
+        filename = os.path.join(path, filename)
+        u = User.current_user()
+        u.save_image(file, filename)
+    return redirect(url_for('.profile'))

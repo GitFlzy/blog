@@ -1,28 +1,29 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-cmn-Hans">
 
 <head>
     <meta charset="UTF-8">
     <title>用户界面</title>
+    <link rel="stylesheet" href="/static/css/blog.main.css">
 </head>
 
 <body>
     <div>
         <p>欢迎, {{ u.username }}</p>
-        {% for s in session.items() %}
-        <p>{{ s }}</p>
-        {% endfor %}
+        <p>{{ message }}</p>
     </div>
-    <br>
     <div>
-        <a href="{{ url_for('blog.index') }}">我的博客</a>
-        <br>
-        <a href="{{ url_for('blog.new') }}">写博客</a>
-        <br><br>
-        <form action="{{ url_for('.logout') }}" method="GET">
+        <a class="btn btn-primary btn-lg active" href="{{ url_for('blog.index') }}">博客主页</a>
+        <a class="btn btn-default btn-lg active" href="{{ url_for('blog.new') }}">写博客</a>
+        <a class="btn btn-default btn-lg active" href="{{ url_for('admin.logout') }}">退出登录 </a>
+        <!-- <form action="{{ url_for('.logout') }}" method="GET">
             <button>退出登录</button>
-        </form>
+        </form> -->
     </div>
+    <form action="{{ url_for('.upload_avatar') }}" method="POST" enctype=multipart/form-data>
+        <input type="file" name="avatar">
+        <input type="submit" name="上传头像">
+    </form>
 </body>
 
 </html>

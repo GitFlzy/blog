@@ -1,12 +1,20 @@
 import time
 from models import Model
-
+from models import Mongodb
 from utils import log
 
 import markdown
 
 
-class Blog(Model):
+class Blog(Mongodb):
+    __fields__ = Mongodb.__fields__ + [
+        ('content', str, ''),
+        ('title', str, -1),
+        ('user_id', int, -1),
+        ('author', str, ''),
+        ('views', int, 0)
+    ]
+
     @classmethod
     def update(cls, id, form):
         t = cls.find(id)
@@ -31,21 +39,6 @@ class Blog(Model):
                 b.markdown()
                 bs.append(b)
         return bs
-
-    def __init__(self, form):
-        super().__init__()
-        self.id = None
-        self.user_id = -1
-        self.author = form.get('author', '')
-        self.title = form.get('title', '')
-        self.content = form.get('content-markdown-doc', '')
-        # 下面的是默认的数据
-        self.completed = False
-        self.ct = int(time.time())
-        self.ut = self.ct
-        self.visits = 0
-        self.replies = 0
-        self.deleted = False
 
     def update_visits(self):
         self.visits += 1

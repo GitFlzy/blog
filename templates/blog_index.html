@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-cmn-Hans">
 
 <head>
     <meta charset="UTF-8">
@@ -15,37 +15,11 @@
         <div class="mid-col" q-class="show:isShow,hide:isShow|isFalse">
 
             <nav id="mobile-nav">
-                <div class="overlay js-overlay" style="background: #4d4d4d"></div>
                 <div class="btnctn js-mobile-btnctn">
                     <div class="slider-trigger list" q-on="click: openSlider(e)"><i class="icon icon-sort"></i></div>
                 </div>
                 <div class="intrude-less">
                     <header id="header" class="inner">
-                        <div class="profilepic">
-                            <img src="/static/assets/blogImg/cute.png" class="js-avatar">
-                        </div>
-                        <hgroup>
-                            <h1 class="header-author js-header-author">username</h1>
-                        </hgroup>
-
-
-                        <nav class="header-nav">
-                            <div class="social">
-                                <a class="github" target="_blank" href="https://github.com/" title="github"><i
-                                        class="icon-github"></i></a>
-                            </div>
-                        </nav>
-
-                        <nav class="header-menu js-header-menu">
-                            <ul style="width: 50%">
-
-
-                                <li style="width: 50%"><a href="/">主页</a></li>
-
-                                <li style="width: 50%"><a href="/photos">相册</a></li>
-
-                            </ul>
-                        </nav>
                     </header>
                 </div>
                 <div class="mobile-mask" style="display:none" q-show="isShow"></div>
@@ -67,34 +41,20 @@
                                             {{ b.title }}
                                         </a>
                                     </h1>
-                                    <time class="archive-article-date" datetime="{{ b.ct }}" itemprop="datePublished">
+                                    <time class="archive-article-date" datetime="{{ b.ut }}" itemprop="datePublished">
                                         <i class="icon-calendar icon"></i>
-                                        {{ b.ct }}
+                                        {{ b.ut }}
                                     </time>
                                 </header>
 
                                 <div class="article-entry" itemprop="articleBody">
-                                    <div>
-                                        {{ b.content | truncate | safe }}
-                                    </div>
-                                    <a class="article-more-a" href="{{ url_for('blog.detail', blog_id=b.id) }}">
-                                        more >>
-                                    </a>
+                                    {{ b.content | truncate | safe }}
                                 </div>
 
                                 <div class="article-info article-info-index">
                                     <div class="article-tag tagcloud">
                                         <i class="icon-price-tags icon"></i>
                                         <ul class="article-tag-list">
-
-                                            <li class="article-tag-list-item">
-                                                <a href="javascript:void(0)" class="js-tag article-tag-list-link color3">旧事</a>
-                                            </li>
-
-                                            <li class="article-tag-list-item">
-                                                <a href="javascript:void(0)" class="js-tag article-tag-list-link color3">游记</a>
-                                            </li>
-
                                         </ul>
                                     </div>
                                     <p class="article-more-link">
@@ -119,28 +79,12 @@
                                     </div>
                                 </div>
 
-
                             </div>
                         </aside>
                         {% endfor %}
-
-                        <nav id="page-nav"><a class="extend prev disabled" rel="prev">« Prev</a>
-                            <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a
-                                class="page-number" href="/page/3/">3</a><span class="space">…</span><a class="page-number"
-                                href="/page/10/">10</a><a class="extend next" rel="next" href="/page/2/">Next »</a>
-                        </nav>
                     </div>
                 </div>
             </div>
-            <footer id="footer">
-                <div class="outer">
-                    <div id="footer-info">
-                        <div class="footer-left">
-                            © {年} { 作者 }
-                        </div>
-                    </div>
-                </div>
-            </footer>
         </div>
 
 
@@ -148,9 +92,6 @@
             <div class="tools-nav header-menu">
 
                 <ul style="width: 70%">
-                    <li style="width: 50%" q-on="click: openSlider(e, 'innerArchive')"><a href="javascript:void(0)"
-                            q-class="active:innerArchive">所有文章</a></li>
-                    <li style="width: 50%" q-on="click: openSlider(e, 'aboutme')"><a href="javascript:void(0)" q-class="active:aboutme">关于我</a></li>
                 </ul>
             </div>
 
@@ -226,5 +167,4 @@
     <script type="text/javascript" src="/static/js/format_time.js"></script>
     <script type="text/javascript" src="/static/js/blog_index.js"></script>
 </body>
-
 </html>

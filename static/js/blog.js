@@ -228,8 +228,8 @@ var bindCommentEvents = function() {
 }
 
 var __main = function() {
-    loadLeftColumn()
-    // loadBlogDetail()
+    loadProfile()
+    loadFormatDate()
 }
 
 __main()

@@ -26,7 +26,7 @@ main = Blueprint('admin', __name__)
 
 @main.route('/')
 def index():
-    return render_template('index.html')
+    return redirect(url_for('admin.login'))
 
 
 @main.route('/register', methods=['GET', 'POST'])
@@ -98,4 +98,17 @@ def upload_avatar():
         filename = os.path.join(path, filename)
         u = User.current_user()
         u.save_image(file, filename)
+    return redirect(url_for('.profile'))
+
+
+@main.route('/settings/password', methods=['POST'])
+@login_required
+def update_password():
+    form = request.form
+    u = User.current_user()
+    status = u.update_password(form)
+    if status is False:
+        log('修改密码失败')
+    else:
+        log('修改密码成功')
     return redirect(url_for('.profile'))

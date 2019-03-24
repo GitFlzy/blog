@@ -1,5 +1,4 @@
 import time
-from models import Model
 from models import Mongodb
 from utils import log
 
@@ -90,7 +89,7 @@ class Blog(Mongodb):
 
 
 # 评论类
-class Comment(Model):
+class Comment(Mongodb):
     def __init__(self, form, user_id=-1):
         self.id = form.get('id', None)
         self.author = form.get('author', '待定')

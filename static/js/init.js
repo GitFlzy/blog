@@ -38,8 +38,8 @@ var ajaxDelete = function(path, callback) {
     ajax('DELETE', path, '', callback)
 }
 
-var ajaxPut = function(path, callback) {
-    ajax('PUT', path, '', callback)
+var ajaxPut = function(path, data, callback) {
+    ajax('PUT', path, data, callback)
 }
 
 var apiBlogCommentAdd = function(form, callback) {
@@ -64,5 +64,21 @@ var apiBlogDelete = function(blogId, callback) {
 
 var apiUserProfile = function(callback) {
     var path = '/api/blog/user/profile'
+    ajaxGet(path, callback)
+}
+
+var apiSendChat = function(form, callback) {
+    // var roomId = form.roomId
+    var path = '/api/blog/chat/room/' + form.room_id + '?action=send'
+    ajaxPost(path, form, callback)
+}
+
+var apiChatAll = function(callback) {
+    var path = '/api/blog/chat/room'
+    ajaxGet(path, callback)
+}
+
+var apiChatByRoom = function(form, callback) {
+    var path = '/api/blog/chat/room/' + form.roomId
     ajaxGet(path, callback)
 }

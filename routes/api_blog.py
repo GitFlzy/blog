@@ -1,6 +1,5 @@
 import json
 
-
 from utils import log
 
 from models.blog import Comment
@@ -9,6 +8,7 @@ from models.user import (
     User,
     login_required,
 )
+# from models.chat import Chat
 
 from flask import (
     request,
@@ -100,3 +100,22 @@ def user_profile():
     u = User.profile(1)
     log('用户简介', u)
     return jsonify(u)
+
+
+# @main.route('/chat/room/<int:room_id>', methods=['GET', 'POST'])
+# def chat(room_id):
+#     form = {}
+#     action = request.args.get('action')
+#     log('enter chat method:', request.method, action)
+#     if request.method == 'POST' and action == 'send':
+#         form = request.get_json()
+#         # content = form.get('content')
+#         # room_id = form.get('room_id')
+#         chat = Chat.new(form)
+#         log('生成的 chat', chat)
+#         chat = chat.json()
+#         return jsonify(chat)
+#     else:
+#         chats = Chat.find_all(room_id=room_id)
+#         chats = [c.json() for c in chats]
+#         return jsonify(chats)

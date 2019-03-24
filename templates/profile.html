@@ -15,15 +15,51 @@
     <div>
         <a class="btn btn-primary btn-lg active" href="{{ url_for('blog.index') }}">博客主页</a>
         <a class="btn btn-default btn-lg active" href="{{ url_for('blog.new') }}">写博客</a>
-        <a class="btn btn-default btn-lg active" href="{{ url_for('admin.logout') }}">退出登录 </a>
-        <!-- <form action="{{ url_for('.logout') }}" method="GET">
-            <button>退出登录</button>
-        </form> -->
+        <a class="btn btn-default btn-lg active" href="{{ url_for('admin.logout') }}">退出登录</a>
     </div>
-    <form action="{{ url_for('.upload_avatar') }}" method="POST" enctype=multipart/form-data>
-        <input type="file" name="avatar">
+    <hr>
+    <img src=""
+    <form action="{{ url_for('.upload_avatar') }}" method="POST" enctype=multipart/form-data> <input type="file" name="avatar">
         <input type="submit" name="上传头像">
     </form>
+    </hr>
+    <hr class="inner">
+    <form method="post" action="/settings/password">
+        <table cellpadding="5" cellspacing="0" border="0" width="100%">
+            <tbody>
+                <tr>
+                    <td width="120" align="right">
+                        当前密码
+                    </td>
+                    <td width="auto" align="left">
+                        <input type="password" class="sl" name="current_password" value="">
+                    </td>
+                </tr>
+                <tr>
+                    <td width="120" align="right">
+                        新密码
+                    </td>
+                    <td width="auto" align="left">
+                        <input type="password" class="sl" name="new_password" value=""
+                            aria-autocomplete="list">
+                    </td>
+                </tr>
+                <tr>
+                    <td width="120" align="right">
+                        再次输入新密码
+                    </td>
+                    <td width="auto" align="left"><input type="password" class="sl" name="again_password" value="">
+                    </td>
+                </tr>
+                <tr>
+                    <td width="120" align="right">
+                        <button class="super normal button">更改密码</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </form>
+    </hr>
 </body>
 
 </html>

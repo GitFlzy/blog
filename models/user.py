@@ -42,6 +42,27 @@ class User(Mongodb):
         self.__dict__.pop('id', None)
         self.__dict__.pop('deleted', None)
 
+    def update_password(self, form):
+        old = form.get('current_password')
+        new = form.get('new_password')
+        again = form.get('again_password')
+        if User.legal_password(old) and (new == again and
+           User.salted_password(old) == self.password):
+            new = User.salted_password(new)
+            self.update({'password': new})
+            # self.password = User.salted_password(new)
+            # self.save()
+            return True
+        return False
+
+    @classmethod
+    def legal_password(cls, pwd):
+        return len(pwd) > 4
+
+    @classmethod
+    def legal_email(cls, email):
+        return '@' in email and len(email) > 5
+
     @classmethod
     def profile(cls, id):
         u = cls.find_by(id=id)
@@ -70,7 +91,8 @@ class User(Mongodb):
         hash2 = sha256(hash1 + salt)
         return hash2
 
-    def hashed_password(self, pwd):
+    @classmethod
+    def hashed_password(cls, pwd):
         import hashlib
         # 用 ascii 编码转换成 bytes 对象
         p = pwd.encode('ascii')
@@ -81,12 +103,9 @@ class User(Mongodb):
     @classmethod
     def validate_rule(cls, form):
         # len : email > 2, password > 4 
-        uname = form.get('email', '')
+        email = form.get('email', '')
         pwd = form.get('password', '')
-        if len(uname) > 2 and len(pwd) > 4:
-            return True
-        else:
-            return False
+        return User.legal_email(email) and User.legal_password(pwd)
 
     @classmethod
     def existent(cls, form):

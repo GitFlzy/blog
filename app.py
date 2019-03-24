@@ -5,7 +5,7 @@ from config import secret_key
 from routes.blog import main as blog_routes
 from routes.admin import main as admin_routes
 from routes.api_blog import main as api_blog_routes
-from routes.mail import main as mail_routes
+# from routes.mail import main as mail_routes
 # from routes.chat import main as chat_routes
 
 

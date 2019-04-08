@@ -1,5 +1,3 @@
-import json
-
 from utils import log
 
 from models.blog import Comment
@@ -20,24 +18,32 @@ from flask import (
 main = Blueprint('api_blog', __name__)
 
 
-@main.route('/', methods=['GET'])
+def blog_filter(blogs):
+    valid_attributes = [
+        'id',
+        'title',
+        'content',
+        'ct',
+    ]
+    blog_list = []
+    for blog in blogs:
+        blog_item = {}
+        for key in valid_attributes:
+            if hasattr(blog, key):
+                value = getattr(blog, key)
+                blog_item[key] = value
+        blog_list.append(blog_item)
+    log('过滤给前端的 blog form', blog_list)
+    return blog_list
+
+
+@main.route('/all', methods=['GET'])
+@login_required
 def index():
-    cur_user = User.current_user()
-    if cur_user is None:
-        return redirect(url_for('admin.login'))
-
-    log('blog index, 当前用户', cur_user)
-    cur_uid = cur_user.id
-    blog = Blog.find_by(id=blog_id)
-    owner_uid = blog.user_id
-    if cur_user.id != owner_uid:
-        return redirect(url_for('blog.index'))
-
-    articles = Blog.all()
-    log('articles', articles)
-    json_ars = [art.json() for art in articles]
-    log('json all blog', json_ars)
-    return jsonify(json_ars)
+    blogs = Blog.all()
+    log('blogs', blogs)
+    blogs = blog_filter(blogs)
+    return jsonify(blogs)
 
 
 @main.route('/comment/add', methods=['POST'])
@@ -102,20 +108,42 @@ def user_profile():
     return jsonify(u)
 
 
-# @main.route('/chat/room/<int:room_id>', methods=['GET', 'POST'])
-# def chat(room_id):
-#     form = {}
-#     action = request.args.get('action')
-#     log('enter chat method:', request.method, action)
-#     if request.method == 'POST' and action == 'send':
-#         form = request.get_json()
-#         # content = form.get('content')
-#         # room_id = form.get('room_id')
-#         chat = Chat.new(form)
-#         log('生成的 chat', chat)
-#         chat = chat.json()
-#         return jsonify(chat)
-#     else:
-#         chats = Chat.find_all(room_id=room_id)
-#         chats = [c.json() for c in chats]
-#         return jsonify(chats)
+@main.route('/chat/room/<int:room_id>', methods=['GET', 'POST'])
+def chat(room_id):
+    form = {}
+    action = request.args.get('action')
+    log('enter chat method:', request.method, action)
+    if request.method == 'POST' and action == 'send':
+        form = request.get_json()
+        # content = form.get('content')
+        # room_id = form.get('room_id')
+        chat = Chat.new(form)
+        log('生成的 chat', chat)
+        chat = chat.json()
+        return jsonify(chat)
+    else:
+        chats = Chat.find_all(room_id=room_id)
+        chats = [c.json() for c in chats]
+        return jsonify(chats)
+
+
+@main.route('/add', methods=['POST'])
+@login_required
+def add():
+    # 创建微博
+    form = request.get_json()
+    log('post 博客', form)
+    u = User.current_user()
+    log('md 文章内容', form['content'])
+    blog = Blog.new(form, user_id=u.id)
+    form = {
+        'status': True,
+        'location': '/articles/{}'.format(blog.id),
+        'title': blog.title,
+        'content': blog.content,
+        'dateTime': blog.ct,
+        'id': blog.id,
+    }
+    return jsonify(form)
+
+

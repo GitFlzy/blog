@@ -6,8 +6,6 @@ var ajax = function(method, path, data, responseCallback) {
     var r = new XMLHttpRequest()
     // 设置请求方法和请求地址
     r.open(method, path, true)
-    // 设置发送的数据的格式为 application/json
-    // 这个不是必须的
     r.setRequestHeader('Content-Type', 'application/json')
     // 注册响应函数
     r.onreadystatechange = function() {
@@ -20,10 +18,6 @@ var ajax = function(method, path, data, responseCallback) {
     data = JSON.stringify(data)
     // 发送请求
     r.send(data)
-}
-
-var e = function(sel) {
-    return document.querySelector(sel)
 }
 
 var ajaxGet = function(path, callback) {
@@ -48,7 +42,7 @@ var apiBlogCommentAdd = function(form, callback) {
 }
 
 var apiBlogAll = function(callback) {
-    var path = '/api/blog/'
+    var path = '/api/blog/all'
     ajaxGet(path, callback)
 }
 
@@ -81,4 +75,10 @@ var apiChatAll = function(callback) {
 var apiChatByRoom = function(form, callback) {
     var path = '/api/blog/chat/room/' + form.roomId
     ajaxGet(path, callback)
+}
+
+var apiBlogAdd = function(form, callback) {
+    var path = '/api/blog/add'
+    // log('form 表单为', form, typeof(form))
+    ajaxPost(path, form, callback)
 }

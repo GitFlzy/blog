@@ -2,8 +2,6 @@ import time
 from models import Mongodb
 from utils import log
 
-import markdown
-
 
 class Blog(Mongodb):
     __fields__ = Mongodb.__fields__ + [
@@ -35,7 +33,6 @@ class Blog(Mongodb):
         bs = []
         for b in all_blogs:
             if b.deleted is False:
-                b.markdown()
                 bs.append(b)
         return bs
 
@@ -54,8 +51,9 @@ class Blog(Mongodb):
     def json(self):
         log('json blog object start')
         d = self.__dict__.copy()
-        comments = [c.json() for c in self.comments()]
-        d['comments'] = comments
+        del d._id
+        # comments = [c.json() for c in self.comments()]
+        # d['comments'] = comments
         log('json end, self', d)
         return d
 
@@ -70,7 +68,6 @@ class Blog(Mongodb):
         bs = []
         for b in blogs:
             if b.deleted is False:
-                b.markdown()
                 bs.append(b)
         return bs
 
@@ -79,13 +76,7 @@ class Blog(Mongodb):
         blog = super().find_by(**kwargs)
         if blog is None or blog.deleted is True:
             return None
-        blog.markdown()
         return blog
-
-    def markdown(self):
-        exts = ['markdown.extensions.extra', 'markdown.extensions.codehilite',
-                'markdown.extensions.tables', 'markdown.extensions.toc']
-        self.content = markdown.markdown(self.content, extensions=exts)
 
 
 # 评论类

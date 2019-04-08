@@ -9,7 +9,7 @@ var buildBoundaryTimesBaseOnNow = function (timestamp = Date.now()) {
     return [year, month, day, hour, minute]
 }
 
-var formatTime = function (createTime) {
+var formatedTime = function (createTime) {
     // python 的 time.time() 时间戳在 js 中要先乘以 1000
     var t = parseInt(createTime) * 1000
     var ct = buildBoundaryTimesBaseOnNow(t)
@@ -44,11 +44,14 @@ var formatTime = function (createTime) {
 }
 
 var loadFormatDate = function() {
+    log('format time start')
     var times = document.querySelectorAll('.archive-article-date')
+    log('times', times)
     for (var i = 0; i < times.length; ++i) {
+        log('format time i=', i)
         var time = times[i]
         var date = time.getAttribute('datetime')
-        date = formatTime(date)
+        date = formatedTime(date)
         time.setAttribute('datetime', date)
         time.innerHTML = date
     }

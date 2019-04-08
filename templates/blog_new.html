@@ -2,30 +2,68 @@
 
 <head>
     <meta charset="utf-8">
-    <link rel="stylesheet" href="/static/editormd/css/editormd.css">
-    <link rel="stylesheet" href="/static/css/bootstrap.min.css">
+    <script src="https://cdn.bootcss.com/remarkable/1.7.1/remarkable.min.js"></script>
+    <link rel="stylesheet" href="/static/css/blog.main.css">
+    <style>
+        .post-article {
+            display: grid;
+            grid-template-rows: 30px 1fr;
+            grid-row-gap: 4px;
+            border: 1px solid red;
+        }
+
+        .article-main {
+            display: grid;
+            grid-template-rows: 20px, 1fr;
+            border: 1px solid blue;
+        }
+
+        .tools-bar {
+            border: 1px solid green;
+            background-color: #444;
+            height: 50px;
+        }
+
+        .article-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            /* grid-column-gap: 10px; */
+            height: 400px;
+        }
+
+        .markdown-text + .markdown-render {
+            border-left: 2px dashed black;
+        }
+
+    </style>
 </head>
 <body>
-    <form method="post" action="{{ url_for('blog.add') }}">
-        <center>
-            <input name="title" class="form-control" type="text" placeholder="在这里输入标题">
-            <input class="btn btn-default" value="发布" type="submit">
-        </center>
-        <div id="content" class="form-control" name="content">
+    <form class="post-article" method="POST" action={{ url_for('.add') }}>
+        <input name="title" class="title-post" type="text" placeholder="输入标题">
+        <div class="article-main">
+            <div id="md-tools" class="tools-bar">
+                <button class="btn-post">发布文章</button>
+            </div>
+            <div class="article-content">
+                <textarea class="markdown-text" name="content"></textarea>
+                <div class="markdown-render"></div>
+            </div>
         </div>
     </form>
 
-    <script src="/static/editormd/jquery-3.3.1.min.js"></script>
-    <script src="/static/editormd/editormd.min.js"></script>
-    <script type="text/javascript">
-        var editormd
-        $(function () {
-            editormd = editormd("content", {
-                width: "90%",
-                height: 640,
-                syncScrolling: "single",
-                path: "{{ url_for('static',filename='editormd/lib/') }}",
-            })
+    <script src="/static/js/markdown_it.js"></script>
+    <script>
+        var md = new Remarkable()
+        var input = document.querySelector('.markdown-text')
+        input.addEventListener('keyup', function(event){
+            // console.log('触发按键事件')
+            var target = event.target
+            var text = input.value
+            // console.log('输入的内容', text)
+            var content = md.render(text)
+            var render = document.querySelector('.markdown-render')
+            render.innerHTML = content
+            // console.log('render', render)
         })
     </script>
 </body>

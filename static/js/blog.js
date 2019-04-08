@@ -186,9 +186,7 @@ var insertCommentReply = function() {
 
 var loadBlogDetail = function() {
     var article = e('.article')
-    // log('found article', article)
     var blogId = article.dataset.blogId
-    // log('found blog id', blogId)
 
     apiCommentsAll(blogId, function(r){
         comments = JSON.parse(r)
@@ -228,8 +226,5 @@ var bindCommentEvents = function() {
 }
 
 var __main = function() {
-    loadProfile()
-    loadFormatDate()
+    
 }
-
-__main()

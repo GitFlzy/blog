@@ -35,16 +35,15 @@ def new():
 @main.route('/articles/<int:blog_id>', methods=['GET', 'POST'])
 def detail(blog_id):
     blog = Blog.find_by(id=blog_id)
+    log('取出来的文章内容', blog.content)
     return render_template('blog_detail.html', blog=blog)
 
 
 @main.route('/add', methods=['POST'])
 @login_required
 def add():
-    # 创建微博
-    form = dict(request.form)
-    log('post 博客', form)
+    form = request.form
+    print('增加文章', form)
     u = User.current_user()
-    form['content'] = form.get('content-markdown-doc', '')
     blog = Blog.new(form, user_id=u.id)
     return redirect(url_for('.detail', blog_id=blog.id))

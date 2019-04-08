@@ -5,28 +5,14 @@
     <meta charset="UTF-8">
     <title>blog</title>
     <link rel="stylesheet" href="/static/css/blog.main.css">
-
+    <script src="https://cdn.bootcss.com/remarkable/1.7.1/remarkable.min.js"></script>
 </head>
 
 <body>
     <div id="container" q-class="show:isCtnShow" style="height: 578px;">
-        <canvas id="anm-canvas" class="anm-canvas" width="848" height="578"></canvas>
-        <div class="left-col" q-class="show:isShow">
+        <div class="left-col">
         </div>
-
         <div class="mid-col" q-class="show:isShow,hide:isShow|isFalse">
-
-            <nav id="mobile-nav">
-                <div class="btnctn js-mobile-btnctn">
-                    <div class="slider-trigger list" q-on="click: openSlider(e)"><i class="icon icon-sort"></i></div>
-                </div>
-                <div class="intrude-less">
-                    <header id="header" class="inner">
-                    </header>
-                </div>
-                <div class="mobile-mask" style="display:none" q-show="isShow"></div>
-            </nav>
-
             <div id="wrapper" class="body-wrap">
                 <div class="menu-l">
                     <div class="canvas-wrap">
@@ -47,19 +33,14 @@
                                             class="icon-calendar icon"></i>{{ blog.ct }}</time>
                                 </header>
                                 <div class="markdown-text article-entry" itemprop="articleBody">
-                                    {{ blog.content | safe}}
+                                    {{ blog.content }}
                                 </div>
                                 <div class="article-info article-info-index">
                                     <div class="article-tag tagcloud">
                                         <i class="icon-price-tags icon"></i>
                                         <ul class="article-tag-list">
-
                                             <li class="article-tag-list-item">
-                                                <a href="javascript:void(0)" class="js-tag article-tag-list-link color3">旧事</a>
-                                            </li>
-
-                                            <li class="article-tag-list-item">
-                                                <a href="javascript:void(0)" class="js-tag article-tag-list-link color3">游记</a>
+                                                <a href="javascript:void(0)" class="js-tag article-tag-list-link color3">记录</a>
                                             </li>
 
                                         </ul>
@@ -79,7 +60,7 @@
                             {% if next_blog != None %}
                             <a href="{{ url_for('blog.detail', blog_id=blog.id+1) }}" id="article-nav-older" class="article-nav-link-wrap">
                                 <div class="article-nav-title">
-                                    {{ next_blog.title }}
+                                    {{ next_blog.title | truncate }}
                                 </div>
                                 <i class="icon-circle-right"></i>
                             </a>
@@ -179,10 +160,11 @@
 
     </div>
 
-    <script type="text/javascript" src="/static/js/init.js"></script>
-    <script type="text/javascript" src="/static/js/left_column.js"></script>
-    <script type="text/javascript" src="/static/js/format_time.js"></script>
-    <script type="text/javascript" src="/static/js/blog.js"></script>
+    <script src="/static/js/init.js"></script>
+    <script src="/static/js/markdown_it.js"></script>
+    <script src="/static/js/left_column.js"></script>
+    <script src="/static/js/format_time.js"></script>
+    <script src="/static/js/blog_detail.js"></script>
 </body>
 
 </html>

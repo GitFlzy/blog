@@ -1,7 +1,6 @@
 var __main = function() {
     loadProfile()
-    // loadFormatDate()
-    // loadArticlePart()
+    loadFormatDate()
 }
 
 __main()

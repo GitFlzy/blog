@@ -1,4 +1,4 @@
-var buildBoundaryTimesBaseOnNow = function (timestamp = Date.now()) {
+var buildBoundaryTimesBaseOnNow = function(timestamp = Date.now()) {
     var nowDate = new Date(timestamp)
     var year = nowDate.getFullYear()
     var month = nowDate.getMonth() + 1

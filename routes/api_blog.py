@@ -6,66 +6,92 @@ from models.user import (
     User,
     login_required,
 )
-# from models.chat import Chat
 
 from flask import (
     request,
     Blueprint,
     jsonify,
+    redirect,
+    url_for,
 )
 
 
 main = Blueprint('api_blog', __name__)
 
 
-def blog_filter(blogs):
+def filtered_blog(blog, **kwargs):
     valid_attributes = [
         'id',
         'title',
         'content',
         'ct',
     ]
+    form = {}
+    for key in valid_attributes:
+        if hasattr(blog, key):
+            value = getattr(blog, key)
+            form[key] = value
+    if (kwargs.get('abstract', False)):
+        form['content'] = form['content'][: 450]
+    return form
+
+
+def filtered_blogs(blogs, **kwargs):
     blog_list = []
     for blog in blogs:
-        blog_item = {}
-        for key in valid_attributes:
-            if hasattr(blog, key):
-                value = getattr(blog, key)
-                blog_item[key] = value
-        blog_list.append(blog_item)
-    log('过滤给前端的 blog form', blog_list)
+        blog_list.append(filtered_blog(blog, **kwargs))
     return blog_list
 
 
 @main.route('/all', methods=['GET'])
-@login_required
 def index():
     blogs = Blog.all()
     log('blogs', blogs)
-    blogs = blog_filter(blogs)
+    blogs = filtered_blogs(blogs)
     return jsonify(blogs)
 
 
-@main.route('/comment/add', methods=['POST'])
-def add_comment():
-    log('进入 add_comment 函数')
-    form = request.get_json()
-    blog_id = int(form.get('blog_id', -1))
-    b = Blog.find_by(id=blog_id)
-    user_id = b.user_id
-    form['user_id'] = user_id
-    log('debug *** form ***', form)
-
-    o = Comment.new(form)
-    b.update_replies()
-    log('debug ** new comment', o)
-    rf = {
-        'comment': o.json(),
-        'replies': b.replies,
+@main.route('/all/abstract', methods=['GET'])
+def abstract():
+    blogs = Blog.all()
+    blogs = filtered_blogs(blogs, abstract=True)
+    form = {
+        'blogs': blogs,
     }
-    log('rf', rf)
-    log('jsonify rf', jsonify(rf), type(jsonify(rf)))
-    return jsonify(rf)
+    return jsonify(form)
+
+'''
+点击标题或者展开全文, 跳转到对应的文章内容,
+同时改变路由,
+    path = {
+        'path': article_id,
+    }
+    pushState(path, '', '/<int:article_id>')
+点击后退能正常回退到主页
+    加入监听函数, addEventListener('popState', function(){})
+点击前进加载文章内容
+    加入监听函数, addEventListener('popState', function(){})
+
+直接在地址栏输入路由也能跳转到对应的页面
+    如果目标是文章详情, 先加载主页单页, 再通过 url 加载对应文章
+    主页如同 host  host/
+    详情页  host/articles/<article_id>, query 忽略, # 忽略
+'''
+
+@main.route('/<int:blog_id>', methods=['GET'])
+def detail(blog_id):
+    log('api blog detail start')
+    blog = Blog.find_by(id=blog_id)
+    form = {
+        # 'blog': 1,
+        'blog': filtered_blog(blog),
+        'status': True,
+    }
+    if blog is None:
+        form['status'] = False
+        form['location'] = '404'
+    return jsonify(form)
+
 
 
 @main.route('/<int:blog_id>/comment/all')
@@ -108,25 +134,6 @@ def user_profile():
     return jsonify(u)
 
 
-@main.route('/chat/room/<int:room_id>', methods=['GET', 'POST'])
-def chat(room_id):
-    form = {}
-    action = request.args.get('action')
-    log('enter chat method:', request.method, action)
-    if request.method == 'POST' and action == 'send':
-        form = request.get_json()
-        # content = form.get('content')
-        # room_id = form.get('room_id')
-        chat = Chat.new(form)
-        log('生成的 chat', chat)
-        chat = chat.json()
-        return jsonify(chat)
-    else:
-        chats = Chat.find_all(room_id=room_id)
-        chats = [c.json() for c in chats]
-        return jsonify(chats)
-
-
 @main.route('/add', methods=['POST'])
 @login_required
 def add():
@@ -146,4 +153,23 @@ def add():
     }
     return jsonify(form)
 
+@main.route('/comment/add', methods=['POST'])
+def add_comment():
+    log('进入 add_comment 函数')
+    form = request.get_json()
+    blog_id = int(form.get('blog_id', -1))
+    b = Blog.find_by(id=blog_id)
+    user_id = b.user_id
+    form['user_id'] = user_id
+    log('debug *** form ***', form)
 
+    o = Comment.new(form)
+    b.update_replies()
+    log('debug ** new comment', o)
+    rf = {
+        'comment': o.json(),
+        'replies': b.replies,
+    }
+    log('rf', rf)
+    log('jsonify rf', jsonify(rf), type(jsonify(rf)))
+    return jsonify(rf)

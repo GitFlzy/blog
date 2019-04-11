@@ -1,8 +1,8 @@
-var navTemplate = function(user) {
-    var avatar = user.avatar
-    var subtitle = user.subtitle
-    var name = user.username
-    var t = `
+let navTemplate = function(user) {
+    let avatar = user.avatar
+    let subtitle = user.subtitle
+    let name = user.username
+    let t = `
         <div class="overlay" style="background: #4d4d4d"></div>
         <div class="intrude-less">
             <header id="header" class="inner">
@@ -20,7 +20,7 @@ var navTemplate = function(user) {
                 </nav>
                 <nav class="header-menu">
                     <ul>
-                        <li><a href="/">主页</a></li>
+                        <li><div class="homepage link">主页</div></li>
                     </ul>
                 </nav>
             </header>
@@ -29,12 +29,18 @@ var navTemplate = function(user) {
     return t
 }
 
-var loadProfile = function() {
+let clickHomePage = function() {
+    // log('点击了主页按钮')
+    loadBlogIndex()
+}
+
+let loadProfile = function() {
     apiUserProfile(function(r){
-        var user = JSON.parse(r)
-        var profile = navTemplate(user)
-        var leftCol = document.querySelector('.left-col')
-        // log('header before insert', header)
+        let user = JSON.parse(r)
+        let profile = navTemplate(user)
+        let leftCol = e('.left-col')
         leftCol.insertAdjacentHTML('beforeend', profile)
+        let homepage = e('.homepage')
+        bindClickEvent(homepage, loadBlogIndex)
     })
 }

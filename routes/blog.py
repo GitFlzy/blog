@@ -19,24 +19,20 @@ from utils import log
 main = Blueprint('blog', __name__)
 
 
-@main.route('/', methods=['GET', 'POST'])
+@main.route('/', methods=['GET'])
 def index():
-    blogs = Blog.find_all(user_id=1)
-    log('当前用户 ({}), 所有的博客 ({})'.format(User.current_user(), blogs))
-    return render_template('blog_index.html', blogs=blogs)
+    return render_template('blog_index.html')
 
 
-@main.route('/new', methods=['GET', 'POST'])
+@main.route('/articles/<article_id>', methods=['GET'])
+def detail(article_id):
+    return index()
+
+
+@main.route('/new', methods=['GET'])
 @login_required
 def new():
     return render_template('blog_new.html')
-
-
-@main.route('/articles/<int:blog_id>', methods=['GET', 'POST'])
-def detail(blog_id):
-    blog = Blog.find_by(id=blog_id)
-    log('取出来的文章内容', blog.content)
-    return render_template('blog_detail.html', blog=blog)
 
 
 @main.route('/add', methods=['POST'])

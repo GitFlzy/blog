@@ -5,6 +5,11 @@
     <meta charset="UTF-8">
     <link rel="stylesheet" href="/static/css/blog.main.css">
     <script src="https://cdn.bootcss.com/remarkable/1.7.1/remarkable.min.js"></script>
+    <style>
+        .link {
+            cursor: pointer;
+        }
+    </style>
 </head>
 
 <body>
@@ -12,6 +17,8 @@
         <div class="left-col">
         </div>
         <div class="mid-col">
+            <div class="article-list">
+            </div>
         </div>
         <div class="tools-col" q-class="show:isShow,hide:isShow|isFalse" q-on="click:stop(e)">
             <div class="tools-nav header-menu">
@@ -86,18 +93,33 @@
     <script src="/static/js/left_column.js"></script>
     <script src="/static/js/mid_col.js"></script>
     <script src="/static/js/format_time.js"></script>
-    <script src="/static/js/markdown_it.js"></script>
     <script>
-        apiBlogAll(function(data){
-            var blogs = JSON.parse(data)
-            // log('获取所有的 blog', blogs)
-            blogs.map(function(blog){
-                blog.ct = formatedTime(blog.ct)
-                blog.content = markedIt(blog.content.substring(0, 300))
-            })
-            loadArticlePart(blogs)
+        let showPage = function(url=location.pathname) {
+            if (url === '/') {
+                loadBlogIndex()
+            } else {
+                let pathList = url.split('/')
+                let blogId = pathList[pathList.length - 1]
+                loadDetailPage(blogId)
+            }
+        }
+        showPage()
+    </script>
+    <script>
+        window.addEventListener('popstate', function(event){
+            log('pop state', event)
+            let state = event.state
+            log('state', state)
+            // log('page', page)
+            if (state == null) {
+                showPage()
+            } else {
+                let page = state.page
+                showPage(page)
+            }
         })
     </script>
+
     <script src="/static/js/blog_index.js"></script>
 </body>
 </html>

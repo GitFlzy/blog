@@ -1,3 +1,11 @@
+.link {
+  cursor: pointer;
+}
+
+.invisible {
+  display: none;
+}
+
 .clearfix:after,
 .clearfix:before {
   content: "";
@@ -994,9 +1002,10 @@ html {
   cursor: default
 }
 
-.left-col #header .header-menu li a {
-  font-size: 19px;
-  min-width: 300px
+.left-col #header .header-menu li div {
+  font-size: 14px;
+  min-width: 300px;
+  display: inline;
 }
 
 .left-col #header .header-smart-menu {
@@ -2236,7 +2245,7 @@ pre .id {
   float: right
 }
 
-.article-more-link a {
+.article-more-link div {
   background: #4d4d4d;
   color: #fff;
   font-size: 12px;
@@ -2246,7 +2255,7 @@ pre .id {
   transition: background .3s
 }
 
-.article-more-link a:hover {
+.article-more-link div:hover {
   background: #3c3c3c
 }
 

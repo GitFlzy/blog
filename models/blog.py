@@ -31,6 +31,7 @@ class Blog(Mongodb):
     def all(cls):
         all_blogs = super().all()
         bs = []
+        all_blogs.reverse()
         for b in all_blogs:
             if b.deleted is False:
                 bs.append(b)

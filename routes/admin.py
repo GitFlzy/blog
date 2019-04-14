@@ -43,17 +43,9 @@ def register():
     return render_template('register.html', error=error)
 
 
-@main.route('/login', methods=['GET', 'POST'])
+@main.route('/login', methods=['GET'])
 def login():
-    error = request.args.get('error', '')
-    form = request.form
-    if request.method == 'POST':
-        log('当前用户', User.current_user())
-        if User.validate_login(form):
-            return redirect(url_for('.profile'))
-        else:
-            error = '无效的账号或者密码'
-    return render_template('login.html', error=error)
+    return render_template('login.html')
 
 
 @main.route('/profile', methods=['GET', 'POST'])

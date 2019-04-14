@@ -1,17 +1,10 @@
 <!DOCTYPE html>
 <html lang="zh-cmn-Hans">
-
 <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" href="/static/css/blog.main.css">
     <script src="https://cdn.bootcss.com/remarkable/1.7.1/remarkable.min.js"></script>
-    <style>
-        .link {
-            cursor: pointer;
-        }
-    </style>
 </head>
-
 <body>
     <div id="container" q-class="show:isCtnShow" style="height: 578px;">
         <div class="left-col">
@@ -20,106 +13,13 @@
             <div class="article-list">
             </div>
         </div>
-        <div class="tools-col" q-class="show:isShow,hide:isShow|isFalse" q-on="click:stop(e)">
-            <div class="tools-nav header-menu">
-                <ul style="width: 70%">
-                </ul>
-            </div>
-        </div>
-        <!-- Root element of PhotoSwipe. Must have class pswp. -->
-        <div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
-
-            <!-- Background of PhotoSwipe. 
-                     It's a separate element as animating opacity is faster than rgba(). -->
-            <div class="pswp__bg"></div>
-
-            <!-- Slides wrapper with overflow:hidden. -->
-            <div class="pswp__scroll-wrap">
-
-                <!-- Container that holds slides. 
-                        PhotoSwipe keeps only 3 of them in the DOM to save memory.
-                        Don't modify these 3 pswp__item elements, data is added later on. -->
-                <div class="pswp__container">
-                    <div class="pswp__item"></div>
-                    <div class="pswp__item"></div>
-                    <div class="pswp__item"></div>
-                </div>
-
-                <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
-                <div class="pswp__ui pswp__ui--hidden">
-
-                    <div class="pswp__top-bar">
-
-                        <!--  Controls are self-explanatory. Order can be changed. -->
-
-                        <div class="pswp__counter"></div>
-
-                        <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
-
-                        <button class="pswp__button pswp__button--share" style="display:none" title="Share"></button>
-
-                        <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
-
-                        <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
-
-                        <div class="pswp__preloader">
-                            <div class="pswp__preloader__icn">
-                                <div class="pswp__preloader__cut">
-                                    <div class="pswp__preloader__donut"></div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
-                        <div class="pswp__share-tooltip"></div>
-                    </div>
-
-                    <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
-                    </button>
-
-                    <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
-                    </button>
-
-                    <div class="pswp__caption">
-                        <div class="pswp__caption__center"></div>
-                    </div>
-                </div>
-            </div>
-        </div>
     </div>
-
     <script src="/static/js/init.js"></script>
-    <script src="/static/js/left_column.js"></script>
-    <script src="/static/js/mid_col.js"></script>
-    <script src="/static/js/format_time.js"></script>
-    <script>
-        let showPage = function(url=location.pathname) {
-            if (url === '/') {
-                loadBlogIndex()
-            } else {
-                let pathList = url.split('/')
-                let blogId = pathList[pathList.length - 1]
-                loadDetailPage(blogId)
-            }
-        }
-        showPage()
-    </script>
-    <script>
-        window.addEventListener('popstate', function(event){
-            log('pop state', event)
-            let state = event.state
-            log('state', state)
-            // log('page', page)
-            if (state == null) {
-                showPage()
-            } else {
-                let page = state.page
-                showPage(page)
-            }
-        })
-    </script>
-
-    <script src="/static/js/blog_index.js"></script>
+    <script src="/static/js/blogApi.js"></script>
+    <script src="/static/js/formatTime.js"></script>
+    <script src="/static/js/leftColumn.js"></script>
+    <script src="/static/js/blogIndex.js"></script>
+    <script src="/static/js/blogDetail.js"></script>
+    <script src="/static/js/main.js"></script>
 </body>
 </html>

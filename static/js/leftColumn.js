@@ -10,7 +10,7 @@ let navTemplate = function(user) {
                     <img src="/static/assets/blogImg/${avatar}" class="js-avatar">
                 </a>
                 <hgroup>
-                    <h1 class="header-author"><a href="/">${name}</a></h1>
+                    <h1 class="header-author"><div class="homepage link">${name}</div></h1>
                 </hgroup>
                 <p class="header-subtitle">${subtitle}</p>
                 <nav class="header-nav">
@@ -31,7 +31,8 @@ let navTemplate = function(user) {
 
 let clickHomePage = function() {
     // log('点击了主页按钮')
-    loadBlogIndex()
+    loadIndexPage()
+    pushHistory('/')
 }
 
 let loadProfile = function() {
@@ -40,7 +41,7 @@ let loadProfile = function() {
         let profile = navTemplate(user)
         let leftCol = e('.left-col')
         leftCol.insertAdjacentHTML('beforeend', profile)
-        let homepage = e('.homepage')
-        bindClickEvent(homepage, loadBlogIndex)
+        let homepage = '.homepage'
+        bindClickEventToAll(homepage, clickHomePage)
     })
 }

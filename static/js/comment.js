@@ -1,4 +1,3 @@
-
 var getCommentTemplate = function(comment, relation='parent') {
     // 原始 comment, 没有层次 root 以及 children
     // root, children 加到 comment-item 旁边
@@ -223,8 +222,4 @@ var resetComment = function(commentElement) {
 var bindCommentEvents = function() {
     bindEventCommentFrameAdd()
     bindEventCommentAdd()
-}
-
-var __main = function() {
-    
 }

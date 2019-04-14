@@ -132,7 +132,7 @@ class User(Mongodb):
     @classmethod
     def validate_login(cls, form):
         # form = dict(form)
-        uname = form.get('email', '')
+        uname = form.get('username', '')
         pwd = form.get('password', '')
         u = User.find_by(email=uname)
         if u is None or u.password != User.salted_password(pwd):

@@ -55,35 +55,14 @@ def index():
 def abstract():
     blogs = Blog.all()
     blogs = filtered_blogs(blogs, abstract=True)
-    form = {
-        'blogs': blogs,
-    }
-    return jsonify(form)
+    return jsonify(blogs)
 
-'''
-点击标题或者展开全文, 跳转到对应的文章内容,
-同时改变路由,
-    path = {
-        'path': article_id,
-    }
-    pushState(path, '', '/<int:article_id>')
-点击后退能正常回退到主页
-    加入监听函数, addEventListener('popState', function(){})
-点击前进加载文章内容
-    加入监听函数, addEventListener('popState', function(){})
-
-直接在地址栏输入路由也能跳转到对应的页面
-    如果目标是文章详情, 先加载主页单页, 再通过 url 加载对应文章
-    主页如同 host  host/
-    详情页  host/articles/<article_id>, query 忽略, # 忽略
-'''
 
 @main.route('/<int:blog_id>', methods=['GET'])
 def detail(blog_id):
     log('api blog detail start')
     blog = Blog.find_by(id=blog_id)
     form = {
-        # 'blog': 1,
         'blog': filtered_blog(blog),
         'status': True,
     }
@@ -91,7 +70,6 @@ def detail(blog_id):
         form['status'] = False
         form['location'] = '404'
     return jsonify(form)
-
 
 
 @main.route('/<int:blog_id>/comment/all')
@@ -105,6 +83,7 @@ def all_comments(blog_id):
 
 
 @main.route('/delete/<int:blog_id>', methods=['DELETE'])
+@login_required
 def delete_blog(blog_id):
     log('debug 删除博客')
 
@@ -126,6 +105,20 @@ def delete_blog(blog_id):
     blog.delete()
     return jsonify({'status': True})
 
+
+@main.route('/login', methods=['POST'])
+def login():
+    form = request.get_json()
+    result = {}
+    if User.validate_login(form):
+        log('登陆成功')
+        result['location'] = '/admin/profile'
+        result['status'] = True
+    else:
+        log('登录失败')
+        result['status'] = False
+    return jsonify(result)
+    
 
 @main.route('/user/profile', methods=['GET'])
 def user_profile():
@@ -152,6 +145,7 @@ def add():
         'id': blog.id,
     }
     return jsonify(form)
+
 
 @main.route('/comment/add', methods=['POST'])
 def add_comment():

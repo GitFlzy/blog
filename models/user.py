@@ -1,4 +1,3 @@
-from models import Model
 from flask import (
     session,
     redirect,

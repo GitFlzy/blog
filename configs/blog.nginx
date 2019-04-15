@@ -1,9 +1,0 @@
-server {
-    listen 80;
-    server_name cenx.cc www.cenx.cc;
-    location / {
-        proxy_pass http://localhost:4196;
-        proxy_set_header X-real-ip $remote_addr;
-        proxy_set_header Host $http_host;
-    }
-}

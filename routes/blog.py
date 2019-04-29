@@ -62,4 +62,4 @@ def post():
     print('增加文章', form)
     u = User.current_user()
     blog = Blog.new(form, user_id=u.id)
-    return redirect(url_for('.detail', article_id=blog.id))
+    return redirect(url_for('.detail', blog_id=blog.id))

@@ -53,19 +53,7 @@
     </form>
 
     <script src="/static/js/init.js"></script>
-    <script>
-        var md = new Remarkable()
-        var input = document.querySelector('.markdown-text')
-        input.addEventListener('keyup', function(event){
-            // console.log('触发按键事件')
-            var target = event.target
-            var text = input.value
-            // console.log('输入的内容', text)
-            var content = md.render(text)
-            var render = document.querySelector('.markdown-render')
-            render.innerHTML = content
-            // console.log('render', render)
-        })
+    <script src="/static/js/mdRender.js">
     </script>
 </body>
 

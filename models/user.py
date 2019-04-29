@@ -5,17 +5,18 @@ from flask import (
 )
 from models.blog import Blog
 from models import Mongodb
-
 from config import salt_key
-
 from functools import wraps
+from utils import log
 
 
 def login_required(route_func):
     @wraps(route_func)
     def func(*args, **kwargs):
         user = User.current_user()
+        log('当前用户', user)
         if user is None:
+            log('user is None', user)
             return redirect(url_for('admin.login', error='用户未登录'))
         return route_func(*args, **kwargs)
     return func

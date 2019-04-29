@@ -4,7 +4,6 @@
 <head>
     <meta charset="UTF-8">
     <title>用户界面</title>
-    <link rel="stylesheet" href="/static/css/blog.main.css">
 </head>
 
 <body>
@@ -13,15 +12,19 @@
         <p>{{ message }}</p>
     </div>
     <div>
-        <a class="btn btn-primary btn-lg active" href="{{ url_for('blog.index') }}">博客主页</a>
-        <a class="btn btn-default btn-lg active" href="{{ url_for('blog.new') }}">写博客</a>
-        <a class="btn btn-default btn-lg active" href="{{ url_for('admin.logout') }}">退出登录</a>
+        <a class="index" href="{{ url_for('blog.index') }}">博客主页</a>
+        <a class="new" href="{{ url_for('blog.new') }}">写博客</a>
+        <a class="manage" href="{{ url_for('blog.edit') }}">管理博客</a>
+        <a class="log-out" href="{{ url_for('admin.logout') }}">退出登录</a>
     </div>
     <hr>
-    <img src=""
-    <form action="{{ url_for('.upload_avatar') }}" method="POST" enctype=multipart/form-data> <input type="file" name="avatar">
-        <input type="submit" name="上传头像">
-    </form>
+    <div>
+        <p>上传头像</p>
+        <form action="{{ url_for('.upload_avatar') }}" method="POST" enctype=multipart/form-data> 
+            <input type="file" name="avatar">
+            <input type="submit" name="上传头像">
+        </form>
+    </div>
     </hr>
     <hr class="inner">
     <form method="post" action="{{ url_for('.update_password') }}">

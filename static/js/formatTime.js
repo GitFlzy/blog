@@ -42,17 +42,3 @@ var formatedTime = function (createTime) {
         return '时间格式错误'
     }
 }
-
-var loadFormatDate = function() {
-    log('format time start')
-    var times = document.querySelectorAll('.archive-article-date')
-    log('times', times)
-    for (var i = 0; i < times.length; ++i) {
-        log('format time i=', i)
-        var time = times[i]
-        var date = time.getAttribute('datetime')
-        date = formatedTime(date)
-        time.setAttribute('datetime', date)
-        time.innerHTML = date
-    }
-}

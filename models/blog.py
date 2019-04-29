@@ -2,6 +2,29 @@ import time
 from models import Mongodb
 from utils import log
 
+def filtered_blog(blog, **kwargs):
+    valid_attributes = [
+        'id',
+        'title',
+        'content',
+        'ct',
+    ]
+    form = {}
+    for key in valid_attributes:
+        if hasattr(blog, key):
+            value = getattr(blog, key)
+            form[key] = value
+    if (kwargs.get('abstract', False)):
+        form['content'] = form['content'][: 450]
+    return form
+
+
+def filtered_blogs(blogs, **kwargs):
+    blog_list = []
+    for blog in blogs:
+        blog_list.append(filtered_blog(blog, **kwargs))
+    return blog_list
+
 
 class Blog(Mongodb):
     __fields__ = Mongodb.__fields__ + [
@@ -9,7 +32,7 @@ class Blog(Mongodb):
         ('title', str, -1),
         ('user_id', int, -1),
         ('author', str, ''),
-        ('views', int, 0)
+        ('views', int, 0),
     ]
 
     @classmethod
@@ -17,7 +40,8 @@ class Blog(Mongodb):
         t = cls.find(id)
         valid_names = [
             'title',
-            'completed'
+            'completed',
+            'content',
         ]
         for key in form:
             # 这里只应该更新我们想要更新的东西
@@ -29,15 +53,12 @@ class Blog(Mongodb):
 
     @classmethod
     def all(cls):
-        all_blogs = super().all()
-        bs = []
-        all_blogs.reverse()
-        for b in all_blogs:
-            if b.deleted is False:
-                bs.append(b)
+        blogs = super().all()
+        blogs.reverse()
+        bs = [b for b in blogs if b.deleted is False]
         return bs
 
-    def update_visits(self):
+    def increase_visits(self):
         self.visits += 1
         self.save()
 

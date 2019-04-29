@@ -1,0 +1,22 @@
+<html lang="zh-cmn-Hans">
+<head>
+    <meta charset="UTF-8">
+    <title>博客管理</title>
+</head>
+<body>
+    <div class="blog-list">
+        {% for blog in blogs %}
+        <div class="cell" data-id="{{ blog.id }}">
+            <a href="{{ url_for('.detail', blog_id=blog.id) }}">
+                {{ blog.title }}
+            </a>
+            <button class="delete-blog">删除</button>
+            <button class="edit-blog">编辑</button>
+        </div>
+        {% endfor %}
+    </div>
+    <script src="/static/js/init.js"></script>
+    <script src="/static/js/blogApi.js"></script>
+    <script src="/static/js/profileMain.js"></script>
+</body>
+</html>

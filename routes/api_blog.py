@@ -15,32 +15,12 @@ from flask import (
     url_for,
 )
 
+from models.blog import (
+    filtered_blog,
+    filtered_blogs,
+)
 
 main = Blueprint('api_blog', __name__)
-
-
-def filtered_blog(blog, **kwargs):
-    valid_attributes = [
-        'id',
-        'title',
-        'content',
-        'ct',
-    ]
-    form = {}
-    for key in valid_attributes:
-        if hasattr(blog, key):
-            value = getattr(blog, key)
-            form[key] = value
-    if (kwargs.get('abstract', False)):
-        form['content'] = form['content'][: 450]
-    return form
-
-
-def filtered_blogs(blogs, **kwargs):
-    blog_list = []
-    for blog in blogs:
-        blog_list.append(filtered_blog(blog, **kwargs))
-    return blog_list
 
 
 @main.route('/all', methods=['GET'])
@@ -86,22 +66,7 @@ def all_comments(blog_id):
 @login_required
 def delete_blog(blog_id):
     log('debug 删除博客')
-
-    cur_user = User.current_user()
-    if cur_user is None:
-        log('当前用户是', cur_user)
-        return redirect(url_for('admin.login'))
-
-    log('debug 当前用户', cur_user)
-    cur_uid = cur_user.id
     blog = Blog.find_by(id=blog_id)
-    owner_uid = blog.user_id
-    if cur_user.id != owner_uid:
-        log("""用户(uid={})想要访问用户(uid={})的博客,
-            跳转到用户(uid={})的博客主页""".format(cur_uid, owner_uid, cur_uid))
-        return redirect(url_for('.index'))
-
-    log('debug before 删除博客')
     blog.delete()
     return jsonify({'status': True})
 

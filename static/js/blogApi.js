@@ -5,6 +5,8 @@ let ajax = function(method, path, data, responseCallback) {
     r.setRequestHeader('Content-Type', 'application/json')
     r.onreadystatechange = function() {
         if(r.readyState === 4) {
+            // console.log('response callback', responseCallback)
+            // console.log('response', r.response)
             responseCallback(r.response)
         }
     }
@@ -52,4 +54,10 @@ let apiAllBlogsAbstract = function(callback) {
 let apiBlogLogin = function(form, callback) {
     let path = '/api/blog/login'
     ajaxPost(path, form, callback)
+}
+
+let apiBlogDelete = function(blogId, callback) {
+    let path = `/api/blog/delete/${blogId}`
+    // console.log('delete callback', callback)
+    ajaxDelete(path, callback)
 }

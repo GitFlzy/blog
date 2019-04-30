@@ -51,7 +51,6 @@ def login():
 @main.route('/profile', methods=['GET', 'POST'])
 @login_required
 def profile():
-    log('logged in, username is in session')
     message = request.args.get('message', '')
     user = User.current_user()
     return render_template('profile.html', u=user, message=message)

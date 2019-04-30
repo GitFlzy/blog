@@ -17,7 +17,7 @@ def filtered_blog(blog, **kwargs):
             value = getattr(blog, key)
             form[key] = value
     if (kwargs.get('abstract', False)):
-        form['content'] = form['content'][: 450]
+        form['content'] = form['content'][: 300]
     return form
 
 

@@ -20,7 +20,7 @@ let initApp = function(url=location.pathname) {
 let bindEvents = function() {
     window.addEventListener('popstate', function(event){
         let state = event.state
-        log('state', state)
+        // log('state', state)
         if (state != null) {
             let page = state.page
             loadPage(page)

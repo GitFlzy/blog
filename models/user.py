@@ -69,7 +69,9 @@ class User(Mongodb):
         return u.json()
 
     def save_image(self, file, path):
+        log('save path', path)
         file.save(path)
+        log('after save file')
         self.avatar = file.filename
         self.save()
 

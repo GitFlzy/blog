@@ -89,6 +89,7 @@ def upload_avatar():
         file.filename = filename
         filename = os.path.join(path, filename)
         u = User.current_user()
+        log('file path', filename)
         u.save_image(file, filename)
     return redirect(url_for('.profile'))
 

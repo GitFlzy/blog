@@ -11,7 +11,8 @@
                 {{ blog.title }}
             </a>
             <button class="delete-blog">删除</button>
-            <button class="edit-blog">编辑</button>
+            <a class="edit-blog" href="{{ url_for('.new', blog_id=blog.id )}}">编辑</a>
+            <!-- <button class="edit-blog">编辑</button> -->
         </div>
         {% endfor %}
     </div>

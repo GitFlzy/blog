@@ -1,6 +1,8 @@
 import time
 from models import Mongodb
 from utils import log
+from models.user import User
+
 
 def filtered_blog(blog, **kwargs):
     valid_attributes = [
@@ -36,8 +38,23 @@ class Blog(Mongodb):
     ]
 
     @classmethod
+    def new(cls, form):
+        blog = super().new(form)
+        log('new blog', blog)
+        u = User.current_user()
+        setattr(blog, 'user_id', u.id)
+        blog.save()
+        log('after add user info, blog', blog)
+        return blog
+
+    @classmethod
     def update(cls, id, form):
         t = cls.find(id)
+        log('要尝试更新的博客', t)
+        log('update 传进来的 form 和 id', form, id)
+        if t is None:
+            log('尝试对一个不存在的博客更新')
+            return None
         valid_names = [
             'title',
             'completed',

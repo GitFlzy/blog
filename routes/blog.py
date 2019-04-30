@@ -37,7 +37,12 @@ def detail(blog_id):
 @main.route('/new', methods=['GET'])
 @login_required
 def new():
-    return render_template('blog_new.html')
+    # /edit?blog_id=xx
+    query = request.args
+    blog_id = int(query.get('blog_id', -1))
+    blog = Blog.find(blog_id)
+    log('new blog ({})'.format(blog))
+    return render_template('blog_new.html', blog=blog)
 
 
 @main.route('/edit', methods=['GET'])
@@ -59,7 +64,11 @@ def delete(blog_id):
 @login_required
 def post():
     form = request.form
-    print('增加文章', form)
-    u = User.current_user()
-    blog = Blog.new(form, user_id=u.id)
+    log('发布的表单', form)
+    blog_id = int(form.get('blog_id', -1))
+    # TODO: 去掉逻辑判断
+    if blog_id == -1:
+        blog = Blog.new(form)
+    else:
+        blog = Blog.update(blog_id, form)
     return redirect(url_for('.detail', blog_id=blog.id))

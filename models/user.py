@@ -3,7 +3,6 @@ from flask import (
     redirect,
     url_for,
 )
-from models.blog import Blog
 from models import Mongodb
 from config import salt_key
 from functools import wraps
@@ -14,10 +13,10 @@ def login_required(route_func):
     @wraps(route_func)
     def func(*args, **kwargs):
         user = User.current_user()
-        log('当前用户', user)
         if user is None:
             log('user is None', user)
             return redirect(url_for('admin.login', error='用户未登录'))
+        log('当前用户', user.id, user.username)
         return route_func(*args, **kwargs)
     return func
 
@@ -77,10 +76,6 @@ class User(Mongodb):
     @classmethod
     def clear_login_status(cls):
         session.pop('user_id', None)
-
-    def Blogs(self):
-        blogs = Blog.find_all(user_id=self.id)
-        return blogs
 
     @classmethod
     def salted_password(cls, password, salt=salt_key):
@@ -150,14 +145,6 @@ class User(Mongodb):
 
     @classmethod
     def register(cls, form):
-        """
-        validate_login 返回
-        :参数 form 是一个包含用户名和用户密码的表单, 如下格式:
-            form = {
-                'email': 'example_email',
-                'password': 'example_password',
-            }
-        """
         u = cls(form)
         if u.validate_register():
             u = cls.new(form)

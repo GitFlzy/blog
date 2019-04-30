@@ -1,0 +1,29 @@
+.post-article {
+    display: grid;
+    grid-template-rows: 30px 1fr;
+    grid-row-gap: 4px;
+    /* border: 1px solid red; */
+}
+
+.article-main {
+    display: grid;
+    grid-template-rows: 20px, 1fr;
+    /* border: 1px solid blue; */
+}
+
+.tools-bar {
+    /* border: 1px solid green; */
+    background-color: #444;
+    height: 50px;
+}
+
+.article-content {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    /* grid-column-gap: 10px; */
+    height: 400px;
+}
+
+.markdown-text + .markdown-render {
+    border-left: 2px dashed black;
+}

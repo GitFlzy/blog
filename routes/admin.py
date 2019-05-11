@@ -29,18 +29,18 @@ def index():
     return redirect(url_for('admin.login'))
 
 
-@main.route('/register', methods=['GET', 'POST'])
-def register():
-    error = ''
-    form = request.form
-    log('register request form', form)
-    if request.method == 'POST':
-        u = User.validate_register(form)
-        if u is not None:
-            return redirect(url_for('.login'))
-        else:
-            error = '注册失败'
-    return render_template('register.html', error=error)
+# @main.route('/register', methods=['GET', 'POST'])
+# def register():
+#     error = ''
+#     form = request.form
+#     log('register request form', form)
+#     if request.method == 'POST':
+#         u = User.validate_register(form)
+#         if u is not None:
+#             return redirect(url_for('.login'))
+#         else:
+#             error = '注册失败'
+#     return render_template('register.html', error=error)
 
 
 @main.route('/login', methods=['GET'])

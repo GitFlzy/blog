@@ -83,7 +83,7 @@ def login():
         log('登录失败')
         result['status'] = False
     return jsonify(result)
-    
+
 
 @main.route('/user/profile', methods=['GET'])
 def user_profile():

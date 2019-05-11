@@ -4,7 +4,7 @@ from utils import log
 from pymongo import MongoClient
 import random
 
-mongodb = MongoClient()
+mongodb = MongoClient('mongodb', 27017)
 
 
 def timestamp():

@@ -12,3 +12,4 @@ __pycache__/*
 config.py
 configs/*
 config.py
+models/__init__.py

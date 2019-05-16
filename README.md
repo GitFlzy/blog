@@ -3,4 +3,4 @@
 
 博客链接：https://cenx.cc
 
-![博客主页](static/assets/blogImg/主页.png)
+![博客主页](static/assets/博客主页.png)

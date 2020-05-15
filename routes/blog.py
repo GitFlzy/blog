@@ -19,19 +19,32 @@ from models.blog import (
 )
 
 from utils import log
+from bson.objectid import ObjectId
+import config
+import os
+import re
+import time
 
 
 main = Blueprint('blog', __name__)
 
 
+def timestamp():
+    return int(time.time())
+
+
 @main.route('/', methods=['GET'])
 def index():
-    return render_template('blog_index.html')
+    # log('all blogs', Blog.all())
+    # blogs = Blog.all()
+    return render_template('index.html')
 
 
-@main.route('/articles/<blog_id>', methods=['GET'])
+@main.route('/post/<blog_id>', methods=['GET'])
 def detail(blog_id):
-    return index()
+    log('请求的blog id', blog_id)
+    # blog = Blog.find_by(id=int(blog_id))
+    return render_template('index.html')
 
 
 @main.route('/new', methods=['GET'])
@@ -60,15 +73,25 @@ def delete(blog_id):
     blog.delete()
     return redirect(url_for('.edit'))
 
+
 @main.route('/post', methods=['POST'])
 @login_required
 def post():
-    form = request.form
+    form = request.form.to_dict()
     log('发布的表单', form)
+    s = re.split('\r|\n|\r\n', form['content'], 1)[0][:50] + '...'
+    log('生成的简介', s)
+    form['excerpt'] = s
+
+    cover_name = form.get('cover_name', None)
+    if cover_name is not None:
+        cover_name = os.path.join(config.client_path, cover_name)
+        form['cover_name'] = cover_name
+
     blog_id = int(form.get('blog_id', -1))
-    # TODO: 去掉逻辑判断
     if blog_id == -1:
         blog = Blog.new(form)
     else:
         blog = Blog.update(blog_id, form)
-    return redirect(url_for('.detail', blog_id=blog.id))
+    return redirect(url_for('.index'))
+

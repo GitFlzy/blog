@@ -15,13 +15,7 @@ let mdRender = function() {
 }
 
 let init = function() {
-    let text = e('.markdown-text').value
+    let text = document.querySelector('.markdown-text').value
     renderText(text)
 }
 
-let main = function() {
-    init()
-    mdRender()
-}
-
-main()

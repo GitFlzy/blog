@@ -3,48 +3,25 @@ import time
 from utils import log
 from pymongo import MongoClient
 import random
+from bson.objectid import ObjectId
 
-mongodb = MongoClient('mongodb', 27017)
+
+mongodb = MongoClient('mongodb://localhost:27017/')
 
 
 def timestamp():
     return int(time.time())
 
 
-def next_id(name):
-    query = {
-        'name': name,
-    }
-    init_id = random.randint(10001, 11100)
-    blog_seq = random.randint(101, 501)
-    update = {
-        '$inc': {
-            'seq': blog_seq
-        }
-    }
-    kwargs = {
-        'query': query,
-        'update': update,
-        'upsert': True,
-        'new': True,
-    }
-    # 存储数据的 id
-    doc = mongodb.db['data_id']
-    # find_and_modify 是一个原子操作函数
-    new_id = init_id + doc.find_and_modify(**kwargs).get('seq')
-    print('mongodb new_id', new_id)
-    return new_id
-
-
 class Mongodb(object):
     __fields__ = [
         '_id',
         # (字段名, 类型, 值)
-        ('id', int, -1),
+        # ('id', int, -1),
         ('type', str, ''),
+        ('created_time', int, 0),
+        ('updated_time', int, 0),
         ('deleted', bool, False),
-        ('ct', int, 0),
-        ('ut', int, 0),
     ]
 
     @classmethod
@@ -83,12 +60,12 @@ class Mongodb(object):
             form = {}
 
         for f in fields:
-            k, t, v = f
-            if k in form:
-                setattr(m, k, t(form[k]))
+            key, _type, val = f
+            if key in form:
+                setattr(m, key, _type(form[key]))
             else:
                 # 设置默认值
-                setattr(m, k, v)
+                setattr(m, key, val)
         # 处理额外的参数 kwargs
         for k, v in kwargs.items():
             if hasattr(m, k):
@@ -96,11 +73,9 @@ class Mongodb(object):
             else:
                 raise KeyError
         # 写入默认数据
-        m.id = next_id(name)
-        # print('debug new id ', m.id)
         ts = int(time.time())
-        m.ct = ts
-        m.ut = ts
+        m.created_time = ts
+        m.updated_time = ts
         # m.deleted = False
         m.type = name.lower()
         # 特殊 model 的自定义设置
@@ -109,15 +84,18 @@ class Mongodb(object):
         return m
 
     @classmethod
-    def _new_with_bson(cls, bson):
+    def _new_with_bson(cls, bson, **kwargs):
         """
         这是给内部 all 这种函数使用的函数
         从 mongo 数据中恢复一个 model
+        bson 代表一个 mongo 对象
         """
         m = cls()
         fields = cls.__fields__.copy()
+        log('恢复的字段 fields', fields, '对应的 classname', cls.__name__)
         # 去掉 _id 这个特殊的字段
         fields.remove('_id')
+        log('bson', bson)
         for f in fields:
             k, t, v = f
             if k in bson:
@@ -126,37 +104,42 @@ class Mongodb(object):
                 # 设置默认值
                 setattr(m, k, v)
         setattr(m, '_id', bson['_id'])
-        # 这一句必不可少，否则 bson 生成一个新的_id
-        # FIXME, 因为现在的数据库里面未必有 type
-        # 所以在这里强行加上
-        # 以后洗掉db的数据后应该删掉这一句
-        m.type = cls.__name__.lower()
+
+        buf = cls()
+        proj = kwargs.pop('projection', {})
+        for key in proj.keys():
+            if proj[key] and hasattr(m, key):
+                setattr(buf, key, getattr(m, key))
+
+        if len(buf.__dict__) > 0:
+            m = buf
+
         return m
 
     @classmethod
-    def all(cls):
-        # 按照 id 升序排序
-        # name = cls.__name__
-        # ds = mongodb.db[name].find()
-        # l = [cls._new_with_bson(d) for d in ds]
-        # return l
-        return cls._find()
+    def all(cls, **kwargs):
+        items = cls.find_all(**kwargs)
+        return items
 
-    # TODO, 还应该有一个函数 find(name, **kwargs)
     @classmethod
     def _find(cls, **kwargs):
         """
         mongo 数据查询
         """
         name = cls.__name__
-        # TODO 过滤掉被删除的元素
-        # kwargs['deleted'] = False
+        log('mongodb find by kwargs', kwargs)
+
+        proj = kwargs.pop('projection', {})
+        log('after pop projection, kwargs', kwargs)
+        ds = mongodb.db[name].find(kwargs)
+
         flag_sort = '__sort'
         sort = kwargs.pop(flag_sort, None)
-        ds = mongodb.db[name].find(kwargs)
         if sort is not None:
             ds = ds.sort(sort)
-        l = [cls._new_with_bson(d) for d in ds]
+
+        l = [cls._new_with_bson(d, projection=proj) for d in ds]
+        log('find data from mongodb', l)
         return l
 
     @classmethod
@@ -187,6 +170,7 @@ class Mongodb(object):
 
     @classmethod
     def find_all(cls, **kwargs):
+        kwargs['deleted'] = False
         return cls._find(**kwargs)
 
     @classmethod
@@ -199,12 +183,8 @@ class Mongodb(object):
 
     @classmethod
     def find_one(cls, **kwargs):
-        """
-        """
-        # TODO 过滤掉被删除的元素
-        # kwargs['deleted'] = False
+        kwargs['deleted'] = False
         l = cls._find(**kwargs)
-        # print('find one debug', kwargs, l)
         if len(l) > 0:
             return l[0]
         else:
@@ -234,7 +214,7 @@ class Mongodb(object):
     def delete(self):
         name = self.__class__.__name__
         query = {
-            'id': self.id,
+            '_id': ObjectId(self._id),
         }
         values = {
             'deleted': True
@@ -266,7 +246,7 @@ class Mongodb(object):
         # TODO, 这里应该用 type 替代
         fk = '{}_id'.format(self.__class__.__name__.lower())
         query = {
-            fk: self.id,
+            fk: self._id,
         }
         count = mongodb.db[name]._find(query).count()
         return count

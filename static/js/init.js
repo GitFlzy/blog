@@ -6,9 +6,9 @@ let e = function(selector) {
     return document.querySelector(selector)
 }
 
-let es = function(selector) {
-    return document.querySelectorAll(selector)
-}
+// let es = function(selector) {
+//     return document.querySelectorAll(selector)
+// }
 
 let bindEvent = function(element, eventName, callback) {
     element.addEventListener(eventName, callback)

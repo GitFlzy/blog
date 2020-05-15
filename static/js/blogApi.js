@@ -1,18 +1,14 @@
-let ajax = function(method, path, data, responseCallback) {
-    let r = new XMLHttpRequest()
-    // 设置请求方法和请求地址
-    r.open(method, path, true)
-    r.setRequestHeader('Content-Type', 'application/json')
-    r.onreadystatechange = function() {
-        if(r.readyState === 4) {
-            // console.log('response callback', responseCallback)
-            // console.log('response', r.response)
-            responseCallback(r.response)
+const ajax = function(method, url, data, responseCallBack) {
+    let xmlHttp = new XMLHttpRequest()
+    xmlHttp.open(method, url, true)
+    xmlHttp.setRequestHeader('Content-Type', 'application/json')
+    xmlHttp.onreadystatechange = function () {
+        if (xmlHttp.readyState === 4) {
+            responseCallBack(xmlHttp.response)
         }
     }
-    // 把数据转换为 json 格式字符串
     data = JSON.stringify(data)
-    r.send(data)
+    xmlHttp.send(data)
 }
 
 let ajaxGet = function(path, callback) {
@@ -43,6 +39,11 @@ let apiUserProfile = function(callback) {
 
 let apiBlogById = function(blogId, callback) {
     let path =`/api/blog/${blogId}`
+    ajaxGet(path, callback)
+}
+
+function apiAllBlogs(callback) {
+    const path = '/api/blog/all'
     ajaxGet(path, callback)
 }
 

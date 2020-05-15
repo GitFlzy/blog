@@ -20,35 +20,69 @@ from models.blog import (
     filtered_blogs,
 )
 
+import config
+import os
+from werkzeug.utils import secure_filename
+
+
 main = Blueprint('api_blog', __name__)
 
 
+def allow_file(filename):
+    suffix = filename.split('.')[-1]
+    from config import accept_user_file_type
+    return suffix in accept_user_file_type
+
+
 @main.route('/all', methods=['GET'])
-def index():
-    blogs = Blog.all()
-    log('blogs', blogs)
-    blogs = filtered_blogs(blogs)
-    return jsonify(blogs)
-
-
-@main.route('/all/abstract', methods=['GET'])
 def abstract():
-    blogs = Blog.all()
-    blogs = filtered_blogs(blogs, abstract=True)
-    return jsonify(blogs)
+    fields = [
+        'id',
+        'cover_name',
+        'title',
+        'excerpt',
+        'created_time',
+        'updated_time',
+    ]
+    d = {k: True for k in fields}
+    blogs = Blog.all(projection=d)
+    log('传回来的 blogs', blogs)
+    bs = [b.json() for b in blogs]
+    form = {
+        'code': 200,
+        'blogs': bs,
+    }
+    return jsonify(form)
 
 
-@main.route('/<int:blog_id>', methods=['GET'])
+@main.route('/post/<blog_id>', methods=['GET'])
 def detail(blog_id):
     log('api blog detail start')
-    blog = Blog.find_by(id=blog_id)
-    form = {
-        'blog': filtered_blog(blog),
-        'status': True,
-    }
+    log('get blog_id', blog_id)
+
+    fields = [
+        'id',
+        'cover_name',
+        'title',
+        'content',
+        'created_time',
+        'updated_time',
+    ]
+
+    d = {k: True for k in fields}
+    blog = Blog.find_by(id=blog_id, projection=d)
+    form = {}
+
     if blog is None:
-        form['status'] = False
-        form['location'] = '404'
+        form = {
+            'code': 404,
+            'message': '找不到请求的网页',
+        }
+    else:
+        form = {
+            'code': 200,
+            'blog': blog.json(),
+        }
     return jsonify(form)
 
 
@@ -98,8 +132,12 @@ def add():
     # 创建微博
     form = request.get_json()
     log('post 博客', form)
+    excerpt = form.content[:300]
+    log('excerpt built', excerpt)
+    form['excerpt'] = excerpt
     u = User.current_user()
     log('md 文章内容', form['content'])
+    # form['user_d'] = u.id
     blog = Blog.new(form, user_id=u.id)
     form = {
         'status': True,
@@ -110,6 +148,38 @@ def add():
         'id': blog.id,
     }
     return jsonify(form)
+
+
+@main.route('/upload', methods=['POST'])
+@login_required
+def upload_images():
+    log('上传图片')
+    path = config.client_path
+
+    if not os.path.exists(path):
+        os.makedirs(path)
+
+    log('request files', request.files)
+    if 'image' not in request.files:
+        return redirect(url_for('blog.new'))
+
+    # getlist 参数与前端命名一致
+    files = request.files.getlist('image')
+    log('上传的所有文件', files)
+    for file in files:
+        filename = file.filename
+        log('文件的文件名', filename)
+        if allow_file(filename):
+            filename = secure_filename(filename)
+            filename = os.path.join(path, filename)
+            log('最终文件路径', filename)
+            file.save(filename)
+
+    result = {
+        'code': 200,
+        'message': '上传成功',
+    }
+    return jsonify(result)
 
 
 @main.route('/comment/add', methods=['POST'])

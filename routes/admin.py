@@ -10,7 +10,7 @@ from flask import (
 )
 from werkzeug.utils import secure_filename
 
-from config import files_path
+from config import client_path
 
 from models.user import (
     User,
@@ -77,7 +77,7 @@ def upload_avatar():
 
     file = request.files['avatar']
     log('load file', file)
-    path = files_path
+    path = client_path
     filename = file.filename
     log('文件的文件名', filename)
     if allow_file(filename):

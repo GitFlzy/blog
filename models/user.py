@@ -28,6 +28,7 @@ class User(Mongodb):
     """
     __fields__ = Mongodb.__fields__ + [
         # (字段名, 类型, 值)
+        ('id', int, -1),
         ('email', str, ''),
         ('password', str, ''),
         ('avatar', str, ''),
@@ -82,6 +83,7 @@ class User(Mongodb):
     @classmethod
     def salted_password(cls, password, salt=salt_key):
         import hashlib
+
         def sha256(ascii_str):
             return hashlib.sha256(ascii_str.encode('ascii')).hexdigest()
         hash1 = sha256(password)

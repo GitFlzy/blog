@@ -35,36 +35,22 @@ header {
     margin: 0 50px;
 }
 
-header .tags {
-    width: 100px;
+nav .menu {
+    width: 600px;
     display: inline-block;
     position: relative;
-    text-align: center;
+    text-align: left;
+    padding: 0 30px;
+}
+
+nav .menu span {
+    padding: 0 20px;
 }
 
 .blog-logo {
     margin-left: 50px;
     position: relative;
     padding-right: 20px;
-}
-
-.tags span,
-.tags:hover>.menu {
-    display: block;
-}
-
-.tags .menu {
-    position: absolute;
-    display: none;
-    width: inherit;
-    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
-    background-color: #fff;
-}
-
-.tags span:hover,
-.tags li:hover {
-    background-color: #f6f6f6;
-    cursor: pointer;
 }
 
 .main-content {
@@ -231,7 +217,7 @@ main .post-block {
     right: -320px;
     z-index: 100;
     display: block;
-    width: -320px;
+    width: 320px;
     background-color: #fffbf0;
     bottom: 0px;
     top: 0px;

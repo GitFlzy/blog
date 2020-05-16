@@ -1,3 +1,7 @@
+// const e = function(selector) {
+//     return document.querySelector(selector)
+// }
+
 let loginEvent = function(event) {
     // log('点击了登录按钮')
     let username = e('.username').value
@@ -26,7 +30,7 @@ let loginEvent = function(event) {
 
 let login = function() {
     let loginButton = e('.login-button')
-    bindClickEvent(loginButton, loginEvent)
+    loginButton.addEventListener('click', loginEvent)
 }
 
 let main = function() {

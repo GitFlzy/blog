@@ -1,39 +1,18 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <title>ex-blog</title>
-    <link rel="stylesheet" type="text/css" href="../static/css/main.css">
+    <title>点滴</title>
+    <link rel="stylesheet" type="text/css" href="/static/css/main.css">
 </head>
 <body>
     <header>
-        <div class="header-inner">
-            <a id="blog-index" href="/">ex'blog</a>
-            <div class="tags">
-                <span>前端</span>
-                <div class="menu">
-                    <li>
-                        <a href="/">js</a>
-                    </li>
-                    <li>前端</li>
-                    <li>js</li>
-                    <li>js</li>
-                    <li>js</li>
-                </div>
+        <nav class="header-inner">
+            <span id="blog-logo" class="link" href="/">lzy300</span>
+            <div class="menu">
+                <span class="link">前端</span>
+                <span class="link">后端</span>
             </div>
-            <span class="tags">
-                <span>后端</span>
-                <div class="menu">
-                    <li>js</li>
-                    <li>后端</li>
-                    <li>js</li>
-                    <li>js</li>
-                    <li>js</li>
-                </div>
-            </span>
-            <span class="tags">
-                <span>手机端</span>
-            </span>
-        </div>
+        </nav>
     </header>
     <main>
         <div class="main-content">
@@ -56,12 +35,12 @@
                 </li>
             </ul>
             <nav class="post-toc">
-                <ol class="nav">
+                <ol class="toc-nav">
 
                 </ol>
             </nav>
         </aside>
-        <div class="toggle sidebar-toggle toggle-close">
+        <div class="toggle sidebar-toggle">
             <span class="toggle-line toggle-line-first"></span>
             <span class="toggle-line toggle-line-middle"></span>
             <span class="toggle-line toggle-line-last"></span>
@@ -69,15 +48,9 @@
     </main>
     <footer class="post-footer"></footer>
     
-    <script>
-        const Front = {
-            
-        }
-    </script>
-    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>   
-    <script src="../static/js/utils.js"></script>
-    <script src="../static/js/motion.js"></script>
-    <script src="../static/js/boot.js"></script>
-
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="/static/js/utils.js"></script>
+    <script src="/static/js/motion.js"></script>
+    <script src="/static/js/boot.js"></script>
 </body>
 </html>

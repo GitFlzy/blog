@@ -50,7 +50,8 @@ def abstract():
     bs = [b.json() for b in blogs]
     form = {
         'code': 200,
-        'blogs': bs,
+        # 'blogs': bs,
+        'list': bs,
     }
     return jsonify(form)
 
@@ -76,12 +77,13 @@ def detail(blog_id):
     if blog is None:
         form = {
             'code': 404,
-            'message': '找不到请求的网页',
+            'redirection': '/NotFound',
         }
     else:
         form = {
             'code': 200,
-            'blog': blog.json(),
+            # 'blog': blog.json(),
+            'list': [blog.json()],
         }
     return jsonify(form)
 

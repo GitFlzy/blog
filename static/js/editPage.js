@@ -95,7 +95,7 @@ function registerUpload() {
             form.append('image', file, file.name)
         }
     
-        Front.utils.ajax('post', '/api/blog/upload', form, function(data){
+        utils.ajax('post', '/api/blog/upload', form, function(data){
             console.log('data receive', data)
             let result = JSON.parse(data)
             if (result.code === 201) {

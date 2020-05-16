@@ -40,6 +40,11 @@ def index():
     return render_template('index.html')
 
 
+@main.route('/NotFound', methods=['GET', 'POST'])
+def not_found():
+    return render_template('404.html')
+
+
 @main.route('/post/<blog_id>', methods=['GET'])
 def detail(blog_id):
     log('请求的blog id', blog_id)
@@ -94,4 +99,3 @@ def post():
     else:
         blog = Blog.update(blog_id, form)
     return redirect(url_for('.index'))
-

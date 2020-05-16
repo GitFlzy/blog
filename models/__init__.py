@@ -6,7 +6,7 @@ import random
 from bson.objectid import ObjectId
 
 
-mongodb = MongoClient('mongodb://localhost:27017/')
+mongodb = MongoClient(host='app-mongodb', port=27017)
 
 
 def timestamp():
@@ -132,6 +132,7 @@ class Mongodb(object):
         proj = kwargs.pop('projection', {})
         log('after pop projection, kwargs', kwargs)
         ds = mongodb.db[name].find(kwargs)
+        log('从数据库中找到的数据', ds)
 
         flag_sort = '__sort'
         sort = kwargs.pop(flag_sort, None)
@@ -139,7 +140,7 @@ class Mongodb(object):
             ds = ds.sort(sort)
 
         l = [cls._new_with_bson(d, projection=proj) for d in ds]
-        log('find data from mongodb', l)
+        # log('find data from mongodb', l)
         return l
 
     @classmethod

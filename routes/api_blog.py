@@ -98,10 +98,10 @@ def all_comments(blog_id):
     return jsonify(cs)
 
 
-@main.route('/delete/<int:blog_id>', methods=['DELETE'])
+@main.route('/delete/<blog_id>', methods=['DELETE'])
 @login_required
 def delete_blog(blog_id):
-    log('debug 删除博客')
+    log('请求文件，删除的 id 是', blog_id)
     blog = Blog.find_by(id=blog_id)
     blog.delete()
     return jsonify({'status': True})
@@ -109,7 +109,9 @@ def delete_blog(blog_id):
 
 @main.route('/login', methods=['POST'])
 def login():
+    log('api login start')
     form = request.get_json()
+    log('get login messge, form', form)
     result = {}
     if User.validate_login(form):
         log('登陆成功')
@@ -156,7 +158,7 @@ def add():
 @login_required
 def upload_images():
     log('上传图片')
-    path = config.client_path
+    path = config.server_path
 
     if not os.path.exists(path):
         os.makedirs(path)

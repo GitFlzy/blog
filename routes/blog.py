@@ -71,9 +71,10 @@ def edit():
     return render_template('blog_edit.html', blogs=blogs)
 
 
-@main.route('/delete/<int:blog_id>', methods=['DELETE'])
+@main.route('/delete/<blog_id>', methods=['DELETE'])
 @login_required
 def delete(blog_id):
+    log('请求文件，删除的 id 是', blog_id)
     blog = Blog.find_by(id=blog_id)
     blog.delete()
     return redirect(url_for('.edit'))

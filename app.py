@@ -19,9 +19,9 @@ app.register_blueprint(api_blog_routes, url_prefix='/api/blog')
 if __name__ == '__main__':
     config = dict(
         port=3000,
-        host='127.0.0.1',
-        # host='0.0.0.0',
-        debug=True,
-        # debug=False,
+        # host='127.0.0.1',
+        host='0.0.0.0',
+        # debug=True,
+        debug=False,
     )
     app.run(**config)

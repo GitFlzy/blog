@@ -90,7 +90,7 @@ def post():
 
     cover_name = form.get('cover_name', None)
     if cover_name is not None:
-        cover_name = os.path.join(config.client_path, cover_name)
+        cover_name = os.path.join(config.server_path, cover_name)
         form['cover_name'] = cover_name
 
     blog_id = int(form.get('blog_id', -1))

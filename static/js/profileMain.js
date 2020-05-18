@@ -1,5 +1,6 @@
 let removeBlog = function(cell) {
-    let blogId = parseInt(cell.dataset.id)
+    let blogId = cell.dataset.id
+    console.log('查找到的blog id ', blogId)
     apiBlogDelete(blogId, function(data){
         // log('data', data)
         let form = JSON.parse(data)

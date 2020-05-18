@@ -1,7 +1,3 @@
-const utils = {
-
-}
-
 function fileTemplate(file) {
     const t = `
         <div class="image-item">
@@ -13,6 +9,7 @@ function fileTemplate(file) {
     `
     return t
 }
+
 function hiddenButton(button) {
     button.style.display = "none"
 }

@@ -34,7 +34,7 @@ function registerSelectImage()
         resource.innerHTML = ''
         for (let i = 0; i < files.length; i++) {
             let file = files[i]
-            resource.insertAdjacentHTML('beforeend', utils.fileTemplate(file))
+            resource.insertAdjacentHTML('beforeend', fileTemplate(file))
         }
     })
 }

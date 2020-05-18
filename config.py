@@ -6,7 +6,7 @@ salt_key = 'put1w6s='
 # client_path = r'C:\Users\Lzy29\OneDrive\Documents\workspace\GitHub\blog\static\assets\blogImg'
 client_path = r'\static\assets\blogImg'
 
-# server_path = r'/var/www/blog/static/assets/blogImg'
+image_path = r'/var/www/blog/static/assets/blogImg'
 server_path = r'/static/assets/blogImg'
 accept_user_file_type = ['jpg', 'png', 'gif']
 

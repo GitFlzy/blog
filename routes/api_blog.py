@@ -158,7 +158,7 @@ def add():
 @login_required
 def upload_images():
     log('上传图片')
-    path = config.server_path
+    path = config.image_path
 
     if not os.path.exists(path):
         os.makedirs(path)

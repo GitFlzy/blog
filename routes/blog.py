@@ -89,7 +89,7 @@ def delete(blog_id):
 def post():
     form = request.form.to_dict()
     log('发布的表单', form)
-    s = re.split('\r|\n|\r\n', form['content'], 1)[0][:50] + '...'
+    s = re.split('\r|\n|\r\n', form['content'], 1)[0][:150] + '...'
     log('生成的简介', s)
     form['excerpt'] = s
 

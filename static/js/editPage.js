@@ -1,27 +1,28 @@
 const utils = {
-    hiddenButton: function(button) {
-        button.style.display = "none"
-    },
-    
-    showButton: function(button) {
-        button.style.display = 'inline-block'
-    },
-    
-    isHidden: function(element) {
-        return element.style.display === 'none'
-    },
-    
-    fileTemplate: function(file) {
-        const t = `
-            <div class="image-item">
-                <span class="image-name">${file.name}</span>
-                <div class="progress">
-                    <progress max="100" value="1" item-width="100" id="progress"></progress>
-                </div>
+
+}
+
+function fileTemplate(file) {
+    const t = `
+        <div class="image-item">
+            <span class="image-name">${file.name}</span>
+            <div class="progress">
+                <progress max="100" value="1" item-width="100" id="progress"></progress>
             </div>
-        `
-        return t
-    },
+        </div>
+    `
+    return t
+}
+function hiddenButton(button) {
+    button.style.display = "none"
+}
+
+function showButton(button) {
+    button.style.display = 'inline-block'
+}
+
+function isHidden(element) {
+    return element.style.display === 'none'
 }
 
 function registerSelectImage()
@@ -50,18 +51,18 @@ function registerShowImages() {
     resource.addEventListener('mouseover', function(event){
         // console.log("鼠标聚焦了该元素", event.target)
         let target = event.target.closest('.image-item')
-        if (!cachedNode.isEqualNode(target) || utils.isHidden(coverBtn)) {
+        if (!cachedNode.isEqualNode(target) || isHidden(coverBtn)) {
             // console.log('鼠标离开了元素', cachedNode)
             let imageName = target.querySelector('.image-name')
             imageName.after(coverBtn)
-            utils.showButton(coverBtn)
+            showButton(coverBtn)
             cachedNode = target
         }
     })
     
     resource.addEventListener('mouseleave', function(event){
         // console.log('鼠标离开了该元素', event.target)
-        utils.hiddenButton(coverBtn)
+        hiddenButton(coverBtn)
     })
 }
 

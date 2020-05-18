@@ -105,9 +105,6 @@ class Blog(Mongodb):
     def json(self):
         # log('json blog object start')
         d = self.__dict__.copy()
-        # if '_id' in d:
-            # d['_id'] = str(d['_id'])
-
         log('json end, self', d)
         return d
 

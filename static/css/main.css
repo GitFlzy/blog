@@ -47,6 +47,10 @@ nav .menu span {
     padding: 0 20px;
 }
 
+nav .about {
+    float: right;
+}
+
 .blog-logo {
     margin-left: 50px;
     position: relative;

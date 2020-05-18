@@ -1,0 +1,73 @@
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>关于</title>
+    <link rel="stylesheet" type="text/css" href="/static/css/main.css">
+    <style>
+        .release-position {
+            width: 800px;
+            margin: 0 auto;
+
+        }
+
+        .release-entry {
+            border-bottom: 1px solid #ebedf0;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="header-inner">
+            <span id="blog-logo" class="link" href="/">lzy300</span>
+            <div class="menu">
+                <span class="link">前端</span>
+                <span class="link">后端</span>
+            </div>
+            <a class="about" href="/about">关于</a>
+
+        </nav>
+    </header>
+
+    <main>
+        <div class="release-position">
+            {% for entry in entries %}
+                <div class="release-entry">
+                    <div class="version">
+                        <h1>{{ entry.version }}</h1>
+                    </div>
+                    <span class="date">
+                        {{ entry.created_time }}
+                    </span>
+                    <div class="content">
+                        {{ entry.content }}
+                    </div>
+                </div>
+            {% endfor %}
+        </main>
+    </main>
+    <footer></footer>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script>
+        function timeFormat(timestamp) {
+            let timeObject = new Date(Number(timestamp) * 1000)
+            let format = timeObject.toISOString().split('T')[0]
+            return format
+        }
+    </script>
+    <script>
+        let release = document.querySelector('.release-position')
+
+        let dateElements = release.querySelectorAll('.date')
+        dateElements.forEach(entry => {
+            entry.innerHTML = timeFormat(entry.innerHTML)
+        })
+
+        let contentElements = release.querySelectorAll('.content')
+        contentElements.forEach(entry => {
+            entry.innerHTML = marked(entry.innerHTML)
+        })
+
+    </script>
+</body>
+</html>

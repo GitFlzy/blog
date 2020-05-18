@@ -18,6 +18,10 @@ from models.blog import (
     filtered_blogs,
 )
 
+from models.progress import (
+    Progress,
+)
+
 from utils import log
 from bson.objectid import ObjectId
 import config
@@ -52,7 +56,7 @@ def detail(blog_id):
     return render_template('index.html')
 
 
-@main.route('/new', methods=['GET'])
+@main.route('/new/blog', methods=['GET'])
 @login_required
 def new():
     # /edit?blog_id=xx
@@ -63,7 +67,7 @@ def new():
     return render_template('blog_new.html', blog=blog)
 
 
-@main.route('/edit', methods=['GET'])
+@main.route('/edit/blog', methods=['GET'])
 @login_required
 def edit():
     blogs = Blog.all()
@@ -80,7 +84,7 @@ def delete(blog_id):
     return redirect(url_for('.edit'))
 
 
-@main.route('/post', methods=['POST'])
+@main.route('/post/blog', methods=['POST'])
 @login_required
 def post():
     form = request.form.to_dict()
@@ -100,3 +104,29 @@ def post():
     else:
         blog = Blog.update(blog_id, form)
     return redirect(url_for('.index'))
+
+
+@main.route('/about', methods=['POST', 'GET'])
+def about():
+    log('about page start')
+    entries = Progress.all()
+    log('get all progress', entries)
+    return render_template('about.html', entries=entries)
+
+
+@main.route('/post/progress', methods=['POST'])
+@login_required
+def post_progress():
+    log('post progress start')
+    form = request.form.to_dict()
+    log('提交的 progress 表单', form)
+    Progress.new(form)
+    return redirect(url_for('.about'))
+
+
+@main.route('/new/progress', methods=['GET'])
+@login_required
+def release():
+    log('new progress start')
+    return render_template('release.html')
+

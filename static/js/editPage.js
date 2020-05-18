@@ -110,8 +110,6 @@ function __main()
     registerCoverButton()
     registerUpload()
     init()
-    mdRender()
-
 }
 
 __main()

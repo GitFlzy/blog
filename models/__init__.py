@@ -7,6 +7,7 @@ from bson.objectid import ObjectId
 
 
 mongodb = MongoClient(host='app-mongodb', port=27017)
+# mongodb = MongoClient(host='localhost', port=27017)
 
 
 def timestamp():

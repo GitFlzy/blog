@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+
+<head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="/static/css/blog.main.css">
+    <link rel="stylesheet" href="/static/css/blog.render.css">
+    <title>进度发布</title>
+</head>
+<body>
+    <form class="post-article" action="{{ url_for('.post_progress') }}" method="post">
+        <!-- <input type="hidden" name="progress_id" class="progressId" value="{{ -1 }}"> -->
+        <input name="version" class="title-post" type="text" placeholder="输入版本号">
+        <div class="article-main">
+            <div id="md-tools" class="tools-bar">
+                <button class="btn-post">发布进度说明</button>
+            </div>
+            <div class="article-content">
+                <textarea class="markdown-text" name="content"></textarea>
+                <div class="markdown-render"></div>
+            </div>
+        </div>
+    </form>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="/static/js/utils.js"></script>
+    <script src="/static/js/mdRender.js"></script>
+    <script>
+        init()
+        </script>
+</body>
+
+</html>

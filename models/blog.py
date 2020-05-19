@@ -2,6 +2,8 @@ import time
 from models import Mongodb
 from utils import log
 from models.user import User
+import io
+import re
 
 
 def filtered_blog(blog, **kwargs):
@@ -140,6 +142,17 @@ class Blog(Mongodb):
         # if blog is None or blog.deleted is True:
         #     return None
         return blog
+
+    @classmethod
+    def _article_from_content(cls, content):
+        buf = re.split(r'[\r\n]', content, 1)
+        excerpt = re.split(r'[\r\n]', buf[1], 1)[0][:150] + '...'
+        form = {
+            'title': buf[0],
+            'content': buf[1],
+            'excerpt': excerpt,
+        }
+        return form
 
 
 # 评论类

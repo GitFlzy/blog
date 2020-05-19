@@ -215,6 +215,16 @@ main .post-block {
     text-align: center;
 }
 
+.post-time span {
+    padding: 0 10px;
+    font-size: 14px;
+    font-style: italic;
+}
+
+.post-time span+span {
+    border-left: 1.8px solid black;
+}
+
 /* 侧边栏 */
 .sidebar {
     position: fixed;

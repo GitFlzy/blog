@@ -10,20 +10,22 @@ motion = {
             utils.hideElement('.search-title')
         }
 
-        function markedIt(text) {
-            return marked(text)
-        }
 
         function itemTemplate(blog) {
+            let title = marked(blog.title)
             let ct = utils.timeFormat(blog.created_time)
-            let content = markedIt(blog.content)
+            let ut = utils.timeFormat(blog.updated_time)
+            let content = marked(blog.content)
 
             return `
                 <article class="post-block">
                     <div class="background-pic" style="background-image: url(${blog.cover_name})"></div>
                     <div class="post-header">
-                        <h1 class="post-title">${blog.title}</h1>
-                        <div class="post-time">${ct}</div>
+                        <div class="post-title">${title}</div>
+                        <div class="post-time">
+                            <span class="created-time">创建于 ${ct}</span>
+                            <span class="created-time">更新于 ${ut}</span>
+                        </div>
                     </div>
                     <div class="post-body">
                         ${content}
@@ -63,7 +65,8 @@ motion = {
         function itemTemplate(blog) {
             let b = blog
             let ut = utils.timeFormat(blog.updated_time)
-            let excerpt = b.excerpt
+            let excerpt = marked(b.excerpt)
+            let title = b.title.replace('#', '')
 
             const t = `
                 <div class="post-item" data-blog-id=${b.id}>
@@ -71,7 +74,7 @@ motion = {
                         <img class="post-cover link post-link" src=${b.cover_name}></img>
                     </div>
                     <div class="post-content">
-                        <div class="post-title link post-link">${b.title}</div>
+                        <div class="post-title link post-link">${title}</div>
                         <div class="post-excerpt">${excerpt}</div>
                         <div class="update-time">${ut}</div>
                     </div>

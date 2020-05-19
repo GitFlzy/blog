@@ -19,20 +19,19 @@
     </style>
 </head>
 <body>
+    <div class="upload">
+        <input class="select-image" type="file" multiple id="file">
+        <div class="upload-btn">上传图片</div>
+        <div class="resource">
+            <span class="set-cover-btn" style="display: none;">设为封面图片</span>
+        </div>
+        <div class="preview"></div>
+    </div>
+
     <form class="post-article" action="{{ url_for('.post') }}" method="post">
         <input type="hidden" name="blog_id" class="blogId" value="{{ blog.id or -1 }}">
         <input type="hidden" name="cover_name" class="coverName">
-        <input name="title" class="title-post" type="text" placeholder="输入标题"
-            value="{{ blog.title }}">
-            
-        <div class="upload">
-            <input class="select-image" type="file" multiple id="file">
-            <div class="upload-btn">上传图片</div>
-            <div class="resource">
-                <span class="set-cover-btn" style="display: none;">设为封面图片</span>
-            </div>
-            <!-- <div class="preview"></div> -->
-        </div>
+        <div></div>
 
         <div class="article-main">
             <div id="md-tools" class="tools-bar">

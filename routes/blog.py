@@ -26,9 +26,7 @@ from utils import log
 from bson.objectid import ObjectId
 import config
 import os
-import re
 import time
-
 
 main = Blueprint('blog', __name__)
 
@@ -83,15 +81,14 @@ def delete(blog_id):
     blog.delete()
     return redirect(url_for('.edit'))
 
-
 @main.route('/post/blog', methods=['POST'])
 @login_required
 def post():
     form = request.form.to_dict()
-    log('发布的表单', form)
-    s = re.split('\r|\n|\r\n', form['content'], 1)[0][:150] + '...'
-    log('生成的简介', s)
-    form['excerpt'] = s
+    log('post blog, from', form)
+
+    article = Blog._article_from_content(form['content'])
+    form.update(article)
 
     cover_name = form.get('cover_name', None)
     if cover_name is not None:

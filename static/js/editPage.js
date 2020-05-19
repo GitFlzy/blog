@@ -26,14 +26,17 @@ function registerSelectImage()
 {
     const select = document.querySelector('.select-image')
     const resource = document.querySelector('.resource')
+    console.log('resource element', resource)
 
     select.addEventListener('change', function(event){
         let fileInput = event.target.parentNode.querySelector('#file')
         let files = fileInput.files
-        // console.log('files', files)
+        console.log('files', files)
         resource.innerHTML = ''
         for (let i = 0; i < files.length; i++) {
+            // console.log('执行')
             let file = files[i]
+            console.log('get file template', fileTemplate(file))
             resource.insertAdjacentHTML('beforeend', fileTemplate(file))
         }
     })

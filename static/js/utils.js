@@ -161,5 +161,4 @@ utils = {
         let format = timeObject.toISOString().split('T')[0]
         return format
     },
-
 }

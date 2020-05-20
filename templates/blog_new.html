@@ -29,8 +29,9 @@
     </div>
 
     <form class="post-article" action="{{ url_for('.post') }}" method="post">
-        <input type="hidden" name="blog_id" class="blogId" value="{{ blog.id or -1 }}">
-        <input type="hidden" name="cover_name" class="coverName">
+        <input type="hidden" name="blog_id" class="blogId" value="{{ blog.id or ''}}">
+        <input type="hidden" name="cover_name" class="coverName" 
+         value="{{ blog.cover_name | default('6a105320-9d75-11e9-84fc-f5e0aa1b654a.jpg') }}">
         <div></div>
 
         <div class="article-main">
@@ -38,7 +39,7 @@
                 <button class="btn-post">发布文章</button>
             </div>
             <div class="article-content">
-                <textarea class="markdown-text" name="content">{{ blog.content }}</textarea>
+                <textarea class="markdown-text" name="content">{{ content }}</textarea>
                 <div class="markdown-render"></div>
             </div>
         </div>

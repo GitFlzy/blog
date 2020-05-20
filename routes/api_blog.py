@@ -65,9 +65,13 @@ def detail(blog_id):
         'id',
         'cover_name',
         'title',
-        'content',
+        'body',
         'created_time',
         'updated_time',
+        'previous_id',
+        'previous_title',
+        'next_id',
+        'next_title',
     ]
 
     d = {k: True for k in fields}
@@ -85,6 +89,7 @@ def detail(blog_id):
             # 'blog': blog.json(),
             'list': [blog.json()],
         }
+    log('detail, 发送 form', form)
     return jsonify(form)
 
 

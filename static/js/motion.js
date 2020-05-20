@@ -1,6 +1,26 @@
 motion = {
+    loadDetailPageById: function(blogId) {
+        let url = '/post/' + blogId
+        let record = utils.newRecord(url)
+        motion.loadDetailBody(record)
+        utils.pushState(record)
+    },
+
     loadDetailBody: function(record, callback) {
         // console.log('调用了 detail 注册事件')
+        function registerNearPost() {
+            let postNav = utils.e('.post-nav')
+            postNav.addEventListener('click', function(event) {
+                let target = event.target
+                let item = target.closest('.post-nav-item')
+                // console.log('点击了临近的文章链接')
+                let blogId = item.dataset.id
+                // console.log('blog id ', blogId)
+                if (blogId != '') {
+                    motion.loadDetailPageById(blogId)
+                }
+            })
+        }
 
         function hidePagination() {
             utils.hideElement('.pagination')
@@ -10,12 +30,15 @@ motion = {
             utils.hideElement('.search-title')
         }
 
-
         function itemTemplate(blog) {
             let title = marked(blog.title)
             let ct = utils.timeFormat(blog.created_time)
             let ut = utils.timeFormat(blog.updated_time)
-            let content = marked(blog.content)
+            let body = marked(blog.body)
+            let nextId = blog.next_id
+            let nextTitle = blog.next_title.replace('#', '')
+            let prevId = blog.previous_id
+            let prevTitle = blog.previous_title.replace('#', '')
 
             return `
                 <article class="post-block">
@@ -28,8 +51,18 @@ motion = {
                         </div>
                     </div>
                     <div class="post-body">
-                        ${content}
+                        ${body}
                     </class>
+                    <footer class="post-footer">
+                        <div class="post-nav">
+                            <div class="post-nav-prev post-nav-item link" data-id="${prevId}">
+                                <span class="post-title">${prevTitle}</span>
+                            </div>
+                            <div class="post-nav-next post-nav-item link" data-id="${nextId}">
+                                <span class="post-title">${nextTitle}</span>
+                            </div>
+                        </div>
+                    </footer>
                 </article>
             `
         }
@@ -54,7 +87,8 @@ motion = {
                 showDetailElements(blogs)
 
                 callback && callback()
-                motion.navActions()
+                registerNearPost()
+                motion.TOC_Actions()
             })
         }
         
@@ -64,7 +98,7 @@ motion = {
     loadIndexBody: function(record, callback) {
         function itemTemplate(blog) {
             let b = blog
-            let ut = utils.timeFormat(blog.updated_time)
+            let ut = utils.timeFormat(b.updated_time)
             let excerpt = marked(b.excerpt)
             let title = b.title.replace('#', '')
 
@@ -106,7 +140,7 @@ motion = {
             clearPage()
             showIndexElements(blogs)
             callback && callback()
-            motion.navActions()
+            motion.TOC_Actions()
         })
     },
 
@@ -250,7 +284,8 @@ motion = {
             return sections.indexOf(entry.target)
         }
     
-        function observerDocument() {
+        function observerDocument(marginTop) {
+            marginTop = 10000 + marginTop
             let sections = [...utils.es('h2, h3, h4, h5, h6, h7')]
             if (sections.length === 0) {
                 return
@@ -258,11 +293,18 @@ motion = {
     
             let options = {
                 root: null,
-                rootMargin: '10000px 0px -100% 0px',
+                rootMargin: `${marginTop}px 0px -100% 0px`,
                 threshold: 0,
             }
     
-            var observer = new IntersectionObserver(function(entries) {
+            let observer = new IntersectionObserver(function(entries, observe) {
+                let scrollHeight = document.documentElement.scrollHeight + 100;
+                if (scrollHeight > marginTop) {
+                  observe.disconnect();
+                  observerDocument(scrollHeight);
+                  return;
+                }
+                
                 let index = findIndex(entries, sections)
                 activateNavByIndex(index)
             }, options);
@@ -274,14 +316,14 @@ motion = {
     
         buildSidebar()
         bindEventBookMark()
-        observerDocument()
+        observerDocument(document.documentElement.scrollHeight)
     },
 
     clearTOC: function() {
         utils.e('.toc-nav').innerHTML = ''
     },
 
-    navActions: function() {
+    TOC_Actions: function() {
         motion.clearTOC()
         
         if (utils.indexPage()) {

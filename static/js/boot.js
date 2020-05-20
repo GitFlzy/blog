@@ -14,10 +14,7 @@ function registerEvents() {
             // saveCurrentPosition()
             let item = target.closest('.post-item')
             let blogId = item.dataset.blogId
-            let url = '/post/' + blogId
-            let record = utils.newRecord(url)
-            motion.loadDetailBody(record)
-            utils.pushState(record)
+            motion.loadDetailPageById(blogId)
         }
     })
 
@@ -38,7 +35,7 @@ function initApp(callback) {
     let record = utils.newRecord(location.pathname)
     loadPageByRecord(record, callback)
     utils.replaceState(record)
-    motion.navActions()
+    motion.TOC_Actions()
 }
 
 function registerNavToggle() {

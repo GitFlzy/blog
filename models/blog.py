@@ -4,6 +4,8 @@ from utils import log
 from models.user import User
 import io
 import re
+import os
+import config
 
 
 def filtered_blog(blog, **kwargs):
@@ -40,15 +42,16 @@ class Blog(Mongodb):
         ('id', str, ''),
         ('title', str, ''),
         ('excerpt', str, ''),
-        ('content', str, ''),
+        # ('content', str, ''),
+        ('body', str, ''),
         ('next_title', str, ''),
         ('previous_title', str, ''),
         ('user_id', int, -1),
         ('views', int, 0),
         ('cover_name', str, ''),
         # ('author', str, ''),
-        # ('next_id', int, 0),
-        # ('previous_id', int, 0),
+        ('next_id', str, ''),
+        ('previous_id', str, ''),
     ]
 
     @classmethod
@@ -71,15 +74,17 @@ class Blog(Mongodb):
         if t is None:
             log('尝试对一个不存在的博客更新')
             return None
-        valid_names = [
-            'title',
-            'completed',
-            'content',
-        ]
+        # valid_names = [
+        #     'title',
+        #     'completed',
+        #     'body',
+        #     'excerpt',
+        # ]
         for key in form:
             # 这里只应该更新我们想要更新的东西
-            if key in valid_names:
-                setattr(t, key, form[key])
+            # if key in valid_names:
+                # setattr(t, key, form[key])
+            setattr(t, key, form[key])
         t.ut = int(time.time())
         t.save()
         return t
@@ -122,11 +127,11 @@ class Blog(Mongodb):
         for i, blog in enumerate(blogs):
             if i > 0:
                 next_blog = blogs[i - 1]
-                blog.next_id = next_blog._id
+                blog.next_id = next_blog.id
                 blog.next_title = next_blog.title
             if i < len(blogs) - 1:
                 prev_blog = blogs[i + 1]
-                blog.previous_id = prev_blog._id
+                blog.previous_id = prev_blog.id
                 blog.previous_title = prev_blog.title
             blog.save()
 
@@ -144,14 +149,25 @@ class Blog(Mongodb):
         return blog
 
     @classmethod
-    def _article_from_content(cls, content):
-        buf = re.split(r'[\r\n]', content, 1)
-        excerpt = re.split(r'[\r\n]', buf[1], 1)[0][:150] + '...'
-        form = {
-            'title': buf[0],
-            'content': buf[1],
-            'excerpt': excerpt,
-        }
+    def assembled(cls, form):
+        content = form.pop('content')
+        content_list = re.split(r'[\r\n]', content, 1)
+
+        title = content_list[0]
+        body = content_list[1].lstrip()
+        log('生成的 body ', body)
+        log('拆分body', re.split(r'[\r\n]', body, 1))
+        excerpt = re.split(r'[\r\n]', body, 1)[0].strip()
+        log('生成的简介', excerpt)
+        form['body'] = body
+        form['excerpt'] = excerpt
+        form['title'] = title
+
+        cover_name = form.get('cover_name', None)
+        if cover_name is not None:
+            cover_name = os.path.join(config.server_path, cover_name)
+            form['cover_name'] = cover_name
+
         return form
 
 

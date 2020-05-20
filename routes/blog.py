@@ -23,10 +23,10 @@ from models.progress import (
 )
 
 from utils import log
-from bson.objectid import ObjectId
 import config
 import os
 import time
+import re
 
 main = Blueprint('blog', __name__)
 
@@ -59,17 +59,20 @@ def detail(blog_id):
 def new():
     # /edit?blog_id=xx
     query = request.args
-    blog_id = int(query.get('blog_id', -1))
+    blog_id = query.get('blog_id', '')
     blog = Blog.find(blog_id)
+    content = ''
+    if blog is not None:
+        content = blog.title + '\r\n' + '\r\n' + blog.body
     log('new blog ({})'.format(blog))
-    return render_template('blog_new.html', blog=blog)
+    return render_template('blog_new.html', blog=blog, content=content)
 
 
 @main.route('/edit/blog', methods=['GET'])
 @login_required
 def edit():
     blogs = Blog.all()
-    blogs = filtered_blogs(blogs)
+    # blogs = filtered_blogs(blogs)
     return render_template('blog_edit.html', blogs=blogs)
 
 
@@ -81,24 +84,21 @@ def delete(blog_id):
     blog.delete()
     return redirect(url_for('.edit'))
 
+
 @main.route('/post/blog', methods=['POST'])
 @login_required
 def post():
     form = request.form.to_dict()
     log('post blog, from', form)
+    form = Blog.assembled(form)
+    log('after assemble, form', form)
 
-    article = Blog._article_from_content(form['content'])
-    form.update(article)
-
-    cover_name = form.get('cover_name', None)
-    if cover_name is not None:
-        cover_name = os.path.join(config.server_path, cover_name)
-        form['cover_name'] = cover_name
-
-    blog_id = int(form.get('blog_id', -1))
-    if blog_id == -1:
+    blog_id = form.get('blog_id', '')
+    if blog_id == '':
+        log('blog id is (), now new a blog')
         blog = Blog.new(form)
     else:
+        log('blog is not empty, update blog id', blog_id)
         blog = Blog.update(blog_id, form)
     return redirect(url_for('.index'))
 

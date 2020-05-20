@@ -117,6 +117,7 @@ class Blog(Mongodb):
     def _update_first(cls):
         blogs = Blog.all()
         first = blogs[0]
+        log('要更新的最新的一个 blog 是', first)
         first.next_id = ''
         first.next_title = ''
         first.save()
@@ -125,19 +126,20 @@ class Blog(Mongodb):
     def _update_last(cls):
         blogs = Blog.all()
         last = blogs[-1]
+        log('要更新的最旧的一个 blog 是', last)
         last.previous_id = ''
         last.previous_title = ''
+        log('这个blog 的 previous', last.previous_id, last.previous_title)
         last.save()
 
     @classmethod
     def update_adjacency(cls):
+        log('更新邻近 blog')
         blogs = Blog.all()
+        log('所有的 blog', blogs)
 
         if len(blogs) == 0:
             return
-
-        Blog._update_first()
-        Blog._update_last()
 
         for i, blog in enumerate(blogs):
             if i > 0:
@@ -149,6 +151,9 @@ class Blog(Mongodb):
                 blog.previous_id = prev_blog.id
                 blog.previous_title = prev_blog.title
             blog.save()
+
+        Blog._update_first()
+        Blog._update_last()
         
     @classmethod
     def find_all(cls, **kwargs):

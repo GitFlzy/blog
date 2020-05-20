@@ -126,4 +126,3 @@ def post_progress():
 def release():
     log('new progress start')
     return render_template('release.html')
-

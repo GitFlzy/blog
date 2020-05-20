@@ -87,6 +87,7 @@ class Blog(Mongodb):
             setattr(t, key, form[key])
         t.ut = int(time.time())
         t.save()
+        Blog.update_adjacency()
         return t
 
     @classmethod

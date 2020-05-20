@@ -139,7 +139,7 @@ class Blog(Mongodb):
         Blog._update_first()
         Blog._update_last()
 
-        for i in range(len(blogs)):
+        for i, blog in enumerate(blogs):
             if i > 0:
                 next_blog = blogs[i - 1]
                 blog.next_id = next_blog.id

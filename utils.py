@@ -1,10 +1,17 @@
 import time
+import os
+
 
 def log(*args, **kwargs):
-    format = '%H:%M:%S'
-    value = time.localtime(int(time.time()))
-    dt = time.strftime(format, value)
-    time_format = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()) 
-    filename = time_format + '.txt'
+    path = 'logs'
+    if not os.path.exists(path):
+        os.makedirs(path)
+
+    log_format = "%Y-%m-%d"
+    filename = time.strftime(log_format, time.localtime())
+    filename = filename + '.txt'
+    filename = os.path.join(path, filename)
     with open(filename, 'a', encoding='utf-8') as f:
+        date_format = '%H:%M:%S'
+        dt = time.strftime(date_format, time.localtime())
         print(dt, *args, file=f, **kwargs)

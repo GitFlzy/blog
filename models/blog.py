@@ -74,16 +74,7 @@ class Blog(Mongodb):
         if t is None:
             log('尝试对一个不存在的博客更新')
             return None
-        # valid_names = [
-        #     'title',
-        #     'completed',
-        #     'body',
-        #     'excerpt',
-        # ]
         for key in form:
-            # 这里只应该更新我们想要更新的东西
-            # if key in valid_names:
-                # setattr(t, key, form[key])
             setattr(t, key, form[key])
         t.ut = int(time.time())
         t.save()
@@ -123,9 +114,32 @@ class Blog(Mongodb):
         self.save()
 
     @classmethod
+    def _update_first(cls):
+        blogs = Blog.all()
+        first = blogs[0]
+        first.next_id = ''
+        first.next_title = ''
+        first.save()
+
+    @classmethod
+    def _update_last(cls):
+        blogs = Blog.all()
+        last = blogs[-1]
+        last.previous_id = ''
+        last.previous_title = ''
+        last.save()
+
+    @classmethod
     def update_adjacency(cls):
         blogs = Blog.all()
-        for i, blog in enumerate(blogs):
+
+        if len(blogs) == 0:
+            return
+
+        Blog._update_first()
+        Blog._update_last()
+
+        for i in range(len(blogs)):
             if i > 0:
                 next_blog = blogs[i - 1]
                 blog.next_id = next_blog.id
@@ -135,7 +149,7 @@ class Blog(Mongodb):
                 blog.previous_id = prev_blog.id
                 blog.previous_title = prev_blog.title
             blog.save()
-
+        
     @classmethod
     def find_all(cls, **kwargs):
         blogs = super().find_all(**kwargs)

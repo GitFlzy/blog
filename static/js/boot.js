@@ -30,14 +30,6 @@ function registerEvents() {
     })
 }
 
-function initApp(callback) {
-    // console.log('init app, callback', callback)
-    let record = utils.newRecord(location.pathname)
-    loadPageByRecord(record, callback)
-    utils.replaceState(record)
-    motion.TOC_Actions()
-}
-
 function registerNavToggle() {
     let toggle = document.querySelector('.sidebar-toggle')
     let sidebar = document.querySelector('.sidebar')
@@ -75,6 +67,14 @@ function registerNavToggle() {
 
 function registerUnits() {
     registerNavToggle()
+}
+
+function initApp(callback) {
+    // console.log('init app, callback', callback)
+    let record = utils.newRecord(location.pathname)
+    loadPageByRecord(record, callback)
+    utils.replaceState(record)
+    motion.TOC_Actions()
 }
 
 function __main() {

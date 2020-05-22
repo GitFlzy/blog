@@ -1,9 +1,17 @@
+let observers = []
+
 motion = {
     loadDetailPageById: function(blogId) {
         let url = '/post/' + blogId
         let record = utils.newRecord(url)
         motion.loadDetailBody(record)
         utils.pushState(record)
+    },
+
+    disconnectObserveDocument: function() {
+        for (const ob of observers) {
+            ob.disconnect()
+        }
     },
 
     loadDetailBody: function(record, callback) {
@@ -17,6 +25,7 @@ motion = {
                 let blogId = item.dataset.id
                 // console.log('blog id ', blogId)
                 if (blogId != '') {
+                    motion.disconnectObserveDocument()
                     motion.loadDetailPageById(blogId)
                 }
             })
@@ -79,7 +88,8 @@ motion = {
 
         function loadDetailPage(record, callback) {
             // console.log('load detail page, record', record)
-            let blogId = record.path.slice(6).split('/')[0]
+            // let blogId = record.path.slice(6).split('/')[0]
+            let blogId = record.path.replace('/post/', '')
             utils.apiBlogDetail(blogId, function(data){
                 // console.log('返回的数据', data)
                 let blogs = utils.dataSolver(data, 'DETAIL')
@@ -251,6 +261,7 @@ motion = {
 
         function activateNavByIndex(index) {
             let catalog = document.querySelectorAll('.nav-link')
+            utils.log('find catalog', catalog)
             let target = catalog[index]
             if (target.classList.contains('active-current')) {
                 return
@@ -269,12 +280,14 @@ motion = {
     
         function findIndex(entries, sections) {
             // let sections = utils.es('h2, h3, h4, h5, h6, h7')
+            utils.log('find index, entries', entries)
             let index = 0
             let entry = entries[index]
             for (; index < entries.length; ++index) {
                 if (entries[index].boundingClientRect.top > 0) {
                     entry = entries[index]
                     index = sections.indexOf(entry.target)
+                    utils.log('找到触发的元素下标', index)
                     return index === 0 ? 0 : (index - 1)
                 } else {
                     entry = entries[index]
@@ -284,9 +297,10 @@ motion = {
             return sections.indexOf(entry.target)
         }
     
-        function observerDocument(marginTop) {
+        function observeDocument(marginTop) {
             marginTop = 10000 + marginTop
             let sections = [...utils.es('h2, h3, h4, h5, h6, h7')]
+            utils.log('observer, sections', sections)
             if (sections.length === 0) {
                 return
             }
@@ -301,22 +315,24 @@ motion = {
                 let scrollHeight = document.documentElement.scrollHeight + 100;
                 if (scrollHeight > marginTop) {
                   observe.disconnect();
-                  observerDocument(scrollHeight);
+                  observeDocument(scrollHeight);
                   return;
                 }
                 
                 let index = findIndex(entries, sections)
+                utils.log('observe, index', index)
                 activateNavByIndex(index)
             }, options);
-    
+
             for (const title of sections) {
                 observer.observe(title)
+                observers.push(observer)
             }
         }
     
         buildSidebar()
         bindEventBookMark()
-        observerDocument(document.documentElement.scrollHeight)
+        observeDocument(document.documentElement.scrollHeight)
     },
 
     clearTOC: function() {

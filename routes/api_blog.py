@@ -1,5 +1,6 @@
 from utils import log
 
+from models.progress import Progress
 from models.blog import Comment
 from models.blog import Blog
 from models.user import (
@@ -50,8 +51,7 @@ def abstract():
     bs = [b.json() for b in blogs]
     form = {
         'code': 200,
-        # 'blogs': bs,
-        'list': bs,
+        'wrap': bs,
     }
     return jsonify(form)
 
@@ -87,7 +87,7 @@ def detail(blog_id):
         form = {
             'code': 200,
             # 'blog': blog.json(),
-            'list': [blog.json()],
+            'wrap': [blog.json()],
         }
     log('detail, 发送 form', form)
     return jsonify(form)
@@ -211,3 +211,25 @@ def add_comment():
     log('rf', rf)
     log('jsonify rf', jsonify(rf), type(jsonify(rf)))
     return jsonify(rf)
+
+
+@main.route('/about', methods=['POST', 'GET'])
+def about():
+    fields = [
+        'version',
+        'content',
+        'created_time',
+        'updated_time',
+    ]
+
+    d = {k: True for k in fields}
+
+    entries = Progress.all(projection=d)
+    log('get progress from data', entries)
+    entries = [e.json() for e in entries]
+    form = {
+        'code': 200,
+        'wrap': entries,
+    }
+    log('api get all progress', entries)
+    return jsonify(form)

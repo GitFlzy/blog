@@ -105,10 +105,7 @@ def post():
 
 @main.route('/about', methods=['POST', 'GET'])
 def about():
-    log('about page start')
-    entries = Progress.all()
-    log('get all progress', entries)
-    return render_template('about.html', entries=entries)
+    return render_template('index.html')
 
 
 @main.route('/post/progress', methods=['POST'])

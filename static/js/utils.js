@@ -1,10 +1,17 @@
+const observers = []
+
 pageCodes = {
     DETAIL: 200,
     INDEX: 200,
     NOTFOUND: 404,
+    ABOUT: 200,
 }
 
 utils = {
+    log: function() {
+        // console.log.apply(console, arguments)
+    },
+
     newRecord: function(path, title='') {
         // let lastRecord = route.records[route.records.length-1]
         // let lastId = (lastRecord && lastRecord.id) || route.top.id
@@ -78,9 +85,15 @@ utils = {
         this.ajaxGet(path, callback)
     },
 
-    apiBlogDetail: function(id, callback) {
-        const path = `/api/blog/post/${id}`
+    apiBlogDetail: function(route, callback) {
+        const path = `/api/blog${route}`
         // console.log('向地址请求', path)
+        this.ajaxGet(path, callback)
+    },
+
+    apiBlogAbout: function(callback) {
+        const path = `/api/blog/about`
+        console.log('向地址请求', path)
         this.ajaxGet(path, callback)
     },
 
@@ -94,10 +107,28 @@ utils = {
         ele.style.display = ''
     },
 
-    appendHTML: function(selector, objects, template) {
+    appendChildren: function(element, object, template) {
+        let ele = element
+        if (Array.isArray(object)) {
+            for (const o of object) {
+                let t = template(o)
+                ele.insertAdjacentHTML('beforeend', t)
+            }
+        } else {
+            let t = template(object)
+            ele.insertAdjacentHTML('beforeend', t)
+        }
+    },
+
+    appendHTML: function(selector, object, template) {
         let ele = document.querySelector(selector)
-        for (const o of objects) {
-            let t = template(o)
+        if (Array.isArray(object)) {
+            for (const o of object) {
+                let t = template(o)
+                ele.insertAdjacentHTML('beforeend', t)
+            }
+        } else {
+            let t = template(object)
             ele.insertAdjacentHTML('beforeend', t)
         }
     },
@@ -120,7 +151,7 @@ utils = {
             }
             return []
         }
-        return result.list
+        return result.wrap
     },
 
     
@@ -132,17 +163,6 @@ utils = {
     
     scrollToTop: function() {
         scrollToPosition([0, 0])
-    },
-
-    replaceState: function(record, title='') {
-        // console.log('replace state')
-        history.replaceState(record, title, record.path)
-        document.title = title
-    },
-
-    pushState: function(record, title='') {
-        history.pushState(record, title, record.path)
-        document.title = title
     },
 
     indexPage: function () {
@@ -160,5 +180,21 @@ utils = {
         let timeObject = new Date(Number(timestamp) * 1000)
         let format = timeObject.toISOString().split('T')[0]
         return format
+    },
+
+    cleanObservers: function() {
+        for (const o of observers) {
+            o.disconnect()
+        }
+    },
+
+    clean: function(selector) {
+        // 删除元素之后，观察事件仍然能生效，所以先手动停止观察
+        utils.cleanObservers()
+
+        let node = utils.e(selector)
+        if (node) {
+            node.innerHTML = ''
+        }
     },
 }

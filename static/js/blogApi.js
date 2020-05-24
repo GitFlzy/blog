@@ -62,3 +62,8 @@ let apiBlogDelete = function(blogId, callback) {
     // console.log('delete callback', callback)
     ajaxDelete(path, callback)
 }
+
+const apiBlogAbout = function(callback) {
+    let path = '/about'
+    ajaxGet(path, callback)
+}

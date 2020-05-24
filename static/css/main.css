@@ -8,6 +8,10 @@ a {
     cursor: pointer;
 }
 
+.hidden {
+    visibility:hidden;
+}
+
 html,
 body {
     scroll-behavior: smooth;
@@ -36,7 +40,7 @@ header {
 }
 
 nav .menu {
-    width: 600px;
+    /* width: 600px; */
     display: inline-block;
     position: relative;
     text-align: left;
@@ -59,6 +63,7 @@ nav .about {
 
 .main-content {
     display: block;
+    margin: 50px auto;
 }
 
 .main-content .search-title {
@@ -82,7 +87,7 @@ nav .about {
 /* 卡片效果 */
 .main-content .content-wrap {
     max-width: 80%;
-    margin: 0 auto;
+    margin: 130px auto;
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     column-gap: 30px;
@@ -371,4 +376,15 @@ main .post-block {
 .post-nav .post-nav-next:after {
     content: '>';
     font-size: 1.5rem;
+}
+
+.release-position {
+    width: 800px;
+    margin: 0 auto;
+
+}
+
+.release-entry {
+    border-bottom: 1px solid #ebedf0;
+    margin-top: 20px;
 }

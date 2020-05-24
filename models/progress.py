@@ -26,7 +26,11 @@ class Progress(Mongodb):
         return progress
 
     @classmethod
-    def all(cls):
-        progress = super().all()
+    def all(cls, **kwargs):
+        progress = super().all(**kwargs)
         progress = progress[::-1]
         return progress
+
+    def json(self):
+        d = self.__dict__.copy()
+        return d

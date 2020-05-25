@@ -122,15 +122,7 @@ utils = {
 
     appendHTML: function(selector, object, template) {
         let ele = document.querySelector(selector)
-        if (Array.isArray(object)) {
-            for (const o of object) {
-                let t = template(o)
-                ele.insertAdjacentHTML('beforeend', t)
-            }
-        } else {
-            let t = template(object)
-            ele.insertAdjacentHTML('beforeend', t)
-        }
+        utils.appendChildren(ele, object, template)
     },
 
     clearChildren: function(selector) {

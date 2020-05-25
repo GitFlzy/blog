@@ -1,3 +1,10 @@
+const routes = {
+    'NOTFOUND': loadNotFound,
+    'ABOUT': loadAbout,
+    'DETAIL': loadDetail,
+    'INDEX': loadIndex,
+}
+
 function registerNavToggle() {
     let toggle = document.querySelector('.sidebar-toggle')
     let sidebar = document.querySelector('.sidebar')
@@ -64,17 +71,6 @@ function buildWrapWithClass(className) {
     let main = utils.e('.main-content')
     main.appendChild(wrap)
     return wrap
-}
-
-function loadNotFoundPage() {
-    utils.log('not found page')
-}
-
-const routes = {
-    'NOTFOUND': loadNotFoundPage,
-    'ABOUT': loadAbout,
-    'DETAIL': loadDetail,
-    'INDEX': loadIndex,
 }
 
 function routeParser(path) {

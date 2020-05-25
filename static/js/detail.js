@@ -97,15 +97,9 @@ function loadDetail(path) {
         }
     }
 
-    function registerNearPost() {
-        let postNav = utils.e('.post-nav')
-        postNav.addEventListener('click', loadById)
-    }
-
     function loadBody(blogs) {
         cleanBody()
         insertBlogs(blogs)
-        // registerNearPost()
     }
 
     function load(data) {

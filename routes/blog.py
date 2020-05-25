@@ -44,7 +44,7 @@ def index():
 
 @main.route('/NotFound', methods=['GET', 'POST'])
 def not_found():
-    return render_template('404.html')
+    return render_template('index.html')
 
 
 @main.route('/post/<blog_id>', methods=['GET'])

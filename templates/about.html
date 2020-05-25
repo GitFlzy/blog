@@ -52,26 +52,19 @@
         </div>
     </footer>
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-    <script>
-        function timeFormat(timestamp) {
-            let timeObject = new Date(Number(timestamp) * 1000)
-            let format = timeObject.toISOString().split('T')[0]
-            return format
-        }
-    </script>
+    <script src="/static/js/utils.js"></script>
     <script>
         let release = document.querySelector('.release-position')
 
         let dateElements = release.querySelectorAll('.date')
         dateElements.forEach(entry => {
-            entry.innerHTML = timeFormat(entry.innerHTML)
+            entry.innerHTML = utils.timeFormat(entry.innerHTML)
         })
 
         let contentElements = release.querySelectorAll('.content')
         contentElements.forEach(entry => {
             entry.innerHTML = marked(entry.innerHTML)
         })
-
     </script>
 </body>
 </html>

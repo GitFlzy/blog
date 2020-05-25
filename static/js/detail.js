@@ -37,7 +37,8 @@ function loadDetail(path) {
     }
 
     function itemTemplate(blog) {
-        let title = blog.title.replace('#', '')
+        let title = marked(blog.title)
+
         let nextTitle = blog.next_title.replace('#', '')
         let prevTitle = blog.previous_title.replace('#', '')
 
@@ -61,10 +62,10 @@ function loadDetail(path) {
 
         return `
             <article class="post-block">
-                <div class="background-pic nav-link" 
+                <div class="background-pic" 
                  style="background-image: url(${blog.cover_name})"></div>
                 <div class="post-header">
-                    <div class="post-title nav-link">${title}</div>
+                    <div class="post-title">${title}</div>
                     <div class="post-time">
                         <span class="created-time">创建于 ${ct}</span>
                         <span class="created-time">更新于 ${ut}</span>

@@ -10,6 +10,10 @@ function registerEvents() {
         if (target.classList.contains('nav-link')) {
             // utils.log('点击了文章', target, 'class list', target.classList)
             let path = target.dataset.path
+            if (path === '') {
+                return
+            }
+
             loadPage(path)
         }
     })

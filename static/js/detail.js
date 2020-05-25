@@ -48,8 +48,16 @@ function loadDetail(path) {
 
         let nextId = blog.next_id
         let prevId = blog.previous_id
-        let nextPath = '/post/' + nextId
-        let prevPath = '/post/' + prevId
+        
+        let nextPath = ''
+        if (nextId) {
+            nextPath = `/post/${nextId}`
+        }
+
+        let prevPath = ''
+        if (prevId) {
+            prevPath = `/post/${prevId}`
+        }
 
         return `
             <article class="post-block">

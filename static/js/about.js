@@ -8,7 +8,7 @@ function loadAbout() {
 
     function template(entry) {
         let version = entry.version
-        let content = entry.content
+        let content = marked(entry.content)
         let ct = utils.timeFormat(entry.created_time)
 
         const t = `

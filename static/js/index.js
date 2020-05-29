@@ -12,7 +12,7 @@ function loadIndex(record) {
                     <img class="post-cover link nav-link" src=${b.cover_name} data-path="${path}"></img>
                 </div>
                 <div class="post-content">
-                    <div class="post-title link nav-link">${title}</div>
+                    <div class="post-title link nav-link" data-path="${path}">${title}</div>
                     <div class="post-excerpt">${excerpt}</div>
                     <div class="update-time">${ut}</div>
                 </div>

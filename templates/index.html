@@ -4,6 +4,7 @@
     <title>点滴</title>
     <!-- "Icon made by Pixel perfect from www.flaticon.com" -->
     <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@10.0.0/build/styles/xcode.min.css">
     <link rel="stylesheet" type="text/css" href="/static/css/main.css">
 </head>
 <body>
@@ -14,7 +15,6 @@
                 <span class="link">前端</span>
                 <span class="link">后端</span>
             </div>
-            <!-- <a class="about" href="/about">关于</a> -->
             <span class="about link nav-link" data-path="/about">关于</span>
         </nav>
     </header>
@@ -37,7 +37,6 @@
             </ul>
             <nav class="post-toc">
                 <ol class="toc-nav">
-
                 </ol>
             </nav>
         </aside>
@@ -52,6 +51,8 @@
             <a href="http://beian.miit.gov.cn/" target="_blank">桂ICP备19010127号</a>
         </div>
     </footer>
+    <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@10.0.0/build/highlight.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@10.0.0/build/languages/dockerfile.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <script src="/static/js/utils.js?v=1.2"></script>
     <script src="/static/js/sidebar.toc.js"></script>

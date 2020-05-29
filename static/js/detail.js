@@ -36,6 +36,48 @@ function loadDetail(path) {
         return toc
     }
 
+    function show_lines_block(block) {
+        let inner = block.innerHTML
+        let lines = inner.split('\n')
+        for (let [index, line] of lines.entries()) {
+            lines[index] = `<li>${line}</li>`
+        }
+        inner = lines.join('')
+        block.innerHTML = `<ul>${inner}</ul>`
+    }
+
+    function show_lines() {
+        let blocks = utils.es('pre code')
+        for (let block of blocks) {
+            show_lines_block(block)
+        }
+    }
+
+    function rendered(text) {
+        const renderer = new marked.Renderer();
+ 
+        function highlight(code, language) {
+            const validLanguage = hljs.getLanguage(language) ? language : 'plaintext'
+            return hljs.highlight(validLanguage, code).value
+        }
+
+        const options = {
+            renderer: renderer, 
+            gfm: true,
+            pedantic: false,
+            sanitize: false,
+            tables: true,
+            breaks: true,
+            smartLists: true,
+            smartypants: false,
+            highlight: highlight,
+        }
+
+        marked.setOptions(options)
+        let html = marked(text)
+        return html
+    }
+
     function itemTemplate(blog) {
         let title = marked(blog.title)
 
@@ -45,7 +87,8 @@ function loadDetail(path) {
         let ct = utils.timeFormat(blog.created_time)
         let ut = utils.timeFormat(blog.updated_time)
 
-        let body = marked(blog.body)
+        // let body = marked(blog.body)
+        let body = rendered(blog.body)
 
         let nextId = blog.next_id
         let prevId = blog.previous_id
@@ -91,19 +134,12 @@ function loadDetail(path) {
     function insertBlogs(blogs) {
         let wrap = buildWrapWithClass('content-wrap')
         utils.appendChildren(wrap, blogs, itemTemplate)
+
+        show_lines()
     }
 
     function cleanBody() {
         utils.clean('.main-content')
-    }
-
-    function loadById(event) {
-        let item = event.target.closest('.post-nav-item')
-        let id = item.dataset.id
-        if (id != '') {
-            let path = '/post/' + id
-            loadPage(path)
-        }
     }
 
     function loadBody(blogs) {

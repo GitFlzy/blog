@@ -131,10 +131,9 @@ function loadDetail(path) {
         `
     }
 
-    function insertBlogs(blogs) {
+    function insertBlog(blog) {
         let wrap = buildWrapWithClass('content-wrap')
-        utils.appendChildren(wrap, blogs, itemTemplate)
-
+        utils.appendChild(wrap, blog, itemTemplate)
         show_lines()
     }
 
@@ -142,15 +141,16 @@ function loadDetail(path) {
         utils.clean('.main-content')
     }
 
-    function loadBody(blogs) {
+    function loadBody(blog) {
         cleanBody()
-        insertBlogs(blogs)
+        insertBlog(blog)
+        utils.updateTitle(blog.title)
     }
 
     function load(data) {
         // console.log('返回的数据', data)
-        let blogs = utils.dataSolver(data, 'DETAIL')
-        loadBody(blogs)
+        let blog = utils.dataSolver(data, 'DETAIL')
+        loadBody(blog)
         let toc = loadSidebar()
         loadToggle(toc)
     }

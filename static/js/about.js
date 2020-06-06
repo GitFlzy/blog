@@ -44,6 +44,7 @@ function loadAbout() {
     function load(data) {
         let entries = utils.dataSolver(data, 'ABOUT')
         loadBody(entries)
+        utils.updateTitle('关于')
         loadToggle()
     }
 

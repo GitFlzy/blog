@@ -54,7 +54,7 @@ function loadIndex(record) {
         let blogs = utils.dataSolver(data, 'INDEX')
         clean()
         insertIndexBody(blogs)
-
+        utils.updateTitle('lzy 的站点')
         hideSidebar()
         showMenuToggle()
     }

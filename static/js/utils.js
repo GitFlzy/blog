@@ -84,12 +84,10 @@ utils = {
         let ele = element
         if (Array.isArray(object)) {
             for (const o of object) {
-                let t = template(o)
-                ele.insertAdjacentHTML('beforeend', t)
+                utils.appendChild(ele, o, template)
             }
         } else {
-            let t = template(object)
-            ele.insertAdjacentHTML('beforeend', t)
+            utils.appendChild(ele, object, template)
         }
     },
 
@@ -116,6 +114,11 @@ utils = {
             }
             return []
         }
+
+        if (page == 'DETAIL') {
+            return result.wrap[0]
+        }
+
         return result.wrap
     },
     

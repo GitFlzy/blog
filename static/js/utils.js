@@ -80,6 +80,18 @@ utils = {
         this.ajaxGet(path, callback)
     },
 
+    updateTitle: function(title) {
+        title = title.replace('#', '')
+        document.title = title
+    },
+
+    appendChild: function(element, object, template) {
+        let ele = element
+
+        let t = template(object)
+        ele.insertAdjacentHTML('beforeend', t)
+    },
+
     appendChildren: function(element, object, template) {
         let ele = element
         if (Array.isArray(object)) {

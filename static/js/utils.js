@@ -9,24 +9,7 @@ pageCodes = {
 
 utils = {
     log: function() {
-        // console.log.apply(console, arguments)
-    },
-
-    newRecord: function(path, title='') {
-        // let lastRecord = route.records[route.records.length-1]
-        // let lastId = (lastRecord && lastRecord.id) || route.top.id
-    
-        let record = {
-            // id: lastId + 1,
-            path: path,
-            // lastPosition: [0, 0],
-            // title: title,
-        }
-        return record
-    },
-
-    TOC_empty: function() {
-        return utils.es('.nav-item').length === 0
+        console.log.apply(console, arguments)
     },
 
     e: function(selector) {
@@ -97,16 +80,6 @@ utils = {
         this.ajaxGet(path, callback)
     },
 
-    hideElement: function(selector) {
-        let ele = document.querySelector(selector)
-        ele.style.display = 'none'
-    },
-
-    showElement: function(selector) {
-        let ele = document.querySelector(selector)
-        ele.style.display = ''
-    },
-
     appendChildren: function(element, object, template) {
         let ele = element
         if (Array.isArray(object)) {
@@ -145,7 +118,6 @@ utils = {
         }
         return result.wrap
     },
-
     
     scrollToPosition: function(pos) {
         let x = pos[0]
@@ -155,17 +127,6 @@ utils = {
     
     scrollToTop: function() {
         scrollToPosition([0, 0])
-    },
-
-    indexPage: function () {
-        return location.pathname === '/'
-    },
-    
-    detailPage: function () {
-        // "/post/12345"
-        let url = location.pathname
-        let arr = url.split('/')
-        return arr.length > 0 && arr[1] === 'post'
     },
 
     timeFormat: function(timestamp) {

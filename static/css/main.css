@@ -119,6 +119,7 @@ nav .about {
 }
 
 .content-wrap .post-cover {
+    background-color: #ffa500;
     width: 100%;
     cursor: pointer;
     border-radius: 5px 5px 0 0;
@@ -237,7 +238,7 @@ main .post-block {
     z-index: 100;
     display: block;
     width: 320px;
-    background-color: #fffbf0;
+    background-color: #efefef;
     bottom: 0px;
     top: 0px;
     transition: all 0.5s;
@@ -447,8 +448,13 @@ main .post-block {
 pre code li {
     list-style: decimal;
     background-color: #eeeeee;
+    overflow: auto;
 }
 
 pre code li:hover {
     background-color: #f3f3f3;
+}
+
+img {
+  width: 100%;
 }

@@ -445,15 +445,24 @@ main .post-block {
 }
 
 /* 代码高亮补充 */
-pre code li {
+pre code ul {
+    border: 1px solid #ddd;
+    border-radius: 0.5em;
+    padding: 1em;
+    background-color: #e6e8ea;
+    box-shadow: 0 0 0.5em rgba(0, 0, 0, 0.2);
+}
+
+pre code ul li {
     list-style: decimal;
-    background-color: #eeeeee;
+    list-style-position: inside;
     overflow: auto;
 }
 
 pre code li:hover {
     background-color: #f3f3f3;
 }
+
 
 img {
   width: 100%;

@@ -99,7 +99,7 @@ def all_comments(blog_id):
     b = Blog.find_by(id=blog_id)
     comments = b.comments()
     cs = [c.json() for c in comments]
-    log('debug comments', cs)
+    # log('debug comments', cs)
     return jsonify(cs)
 
 

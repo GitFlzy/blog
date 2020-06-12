@@ -7,5 +7,14 @@ pipeline:
       port: 22
       script:
         - echo 'hello gua' >> /tmp/test.txt
+
+    notify:
+        image: drillster/drone-email
+        host: smtp.some-server.com
+        username: 111
+        password: anlwnihao1
+        from: 1311782900@qq.com
+        when:
+            status: [ changed, failure ]
   
         

@@ -10,7 +10,8 @@ pipeline:
 
     notify:
         image: drillster/drone-email
-        secrets: [EMAIL_HOST, EMAIL_PORT, EMAIL_USERNAME, EMAIL_PASSWORD]        when:
-        status: [ success, failure ]
+        secrets: [ EMAIL_HOST, EMAIL_PORT, EMAIL_USERNAME, EMAIL_PASSWORD ]
+        when:
+            status: [ success, failure ]
 
         

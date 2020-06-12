@@ -58,7 +58,7 @@ def abstract():
 
 @main.route('/post/<blog_id>', methods=['GET'])
 def detail(blog_id):
-    log('api blog detail start')
+    # log('api blog detail start')
     log('get blog_id', blog_id)
 
     fields = [

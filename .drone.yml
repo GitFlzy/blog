@@ -10,12 +10,7 @@ pipeline:
 
     notify:
         image: drillster/drone-email
-        host: smtp.some-server.com
-        username: 111
-        password: anlwnihao1
-        from: 1311782900@qq.com
-        recipients: [ lzy2900@outlook.com ]
-        when:
-            status: [ changed, failure ]
-  
+        secrets: [EMAIL_HOST, EMAIL_PORT, EMAIL_USERNAME, EMAIL_PASSWORD]        when:
+        status: [ success, failure ]
+
         

@@ -2,7 +2,7 @@ pipeline:
     deploy:
       image: appleboy/drone-ssh
       host: lzy300.cn
-      username: ubuntu
+      username: root
       secrets: [ ssh_key ]
       port: 22
       script:
